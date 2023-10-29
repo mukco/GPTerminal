@@ -3,10 +3,13 @@
 import cmd from 'node-cmd'
 import readline from 'readline'
 import { marked } from 'marked'
+import inquirer from 'inquirer'
 import { openAiApi } from './api'
-import { program } from 'commander'
 import isEmpty from 'lodash/isEmpty'
+import compact from 'lodash/compact'
+import { program } from 'commander'
 import { markedTerminal } from 'marked-terminal'
+
 
 marked.use(markedTerminal())
 
@@ -22,27 +25,28 @@ let executable
 
 cmd.runSync("chmod +x ./index.js")
 
-let commandResult = cmd.runSync("cat ~/.zsh_history | tail -n 2 | head -n 1 | cut -d ';' -f 2")
-const command = commandResult?.data?.trim() ?? ""
+let commandResult = cmd.runSync("cat ~/.zsh_history | tail -n 5 | head -n 5 | cut -d ';' -f 2")
+const commands = commandResult?.data?.split("\n") ?? ""
 
-const lastCommdQuestion = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
+async function promptUser(commands) {
+  const questions = [
+    {
+      type: 'list',
+      name: 'userChoice',
+      message: 'Please choose a command to debug:',
+      choices: compact([ ...commands, 'Exit']),
+    }
+  ]
 
-lastCommdQuestion.question(marked.parse(`The last command was: **${command}**. \n\n ## Is that the one you want to debug? (Y/n)`), async (debug) => {
-  lastCommdQuestion.close()
+  const answers = await inquirer.prompt(questions);
+  const selectedOption = answers.userChoice
 
-  if (debug !== "Y") {
-    console.log(marked.parse(`# Exiting debugger..`))
-  }
-
-  if (debug == "Y") {
-    console.log(marked.parse(`Debugging **${command}**`))
-    commandResult = cmd.runSync(`${command}`)
+  if (commands.includes(selectedOption)) {
+    console.log(marked.parse(`Debugging **${selectedOption}**`))
+    commandResult = cmd.runSync(`${selectedOption}`)
 
     if (commandResult.stderr || commandResult.err) {
-      chat = await openAiApi.debug(command, commandResult.stderr)
+      chat = await openAiApi.debug(selectedOption, commandResult.stderr)
       answer = JSON.parse(chat.response)
       executable = answer.commandExecutable
 
@@ -51,7 +55,7 @@ lastCommdQuestion.question(marked.parse(`The last command was: **${command}**. \
     }
 
     if (isEmpty(commandResult) || (isEmpty(commandResult.stderr) && isEmpty(commandResult.err))) {
-      console.log(`Did not encounter an error running ${command}. This is the output\n\n`, commandResult.data)
+      console.log(`Did not encounter an error running ${selectedOption}. This is the output\n\n`, commandResult.data)
     }
   }
 
@@ -83,5 +87,11 @@ lastCommdQuestion.question(marked.parse(`The last command was: **${command}**. \
       }
     })
   }
-})
 
+  if (selectedOption === 'Exit') {
+    console.log(marked.parse(`# Exiting debugger..`))
+    return
+  }
+}
+
+await promptUser(commands)
