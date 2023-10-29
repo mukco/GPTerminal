@@ -19,7 +19,7 @@ let chat
 let answer
 let executable
 
-cmd.runSync("chmod 777./scripts/last_command.sh")
+cmd.runSync("chmod 777 ./scripts/last_command.sh")
 cmd.runSync("chmod +x ./index.js")
 
 let commandResult = cmd.runSync("sh ./scripts/last_command.sh")
