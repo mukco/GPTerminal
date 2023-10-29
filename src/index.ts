@@ -30,7 +30,7 @@ const lastCommdQuestion = readline.createInterface({
   output: process.stdout
 })
 
-lastCommdQuestion.question(marked.parse(`The last command was: **${command}**. \n\n ## Are you sure that is the one you want to debug? (Y/n)`), async (debug) => {
+lastCommdQuestion.question(marked.parse(`The last command was: **${command}**. \n\n ## Is that the one you want to debug? (Y/n)`), async (debug) => {
   lastCommdQuestion.close()
 
   if (debug !== "Y") {

@@ -8,12 +8,12 @@
     "openai": "^4.14.1"
   },
   "name": "mukco-gpterminal",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "bin": {
     "gpterm": "./index.js"
   },
   "type": "module",
-  "description": "An attempt at faster terminal debugging.",
+  "description": "An attempt at faster terminal debugging using ChatGPT.",
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
