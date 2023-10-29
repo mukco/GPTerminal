@@ -55,518 +55,6 @@ var require_cmd = __commonJS((exports, module) => {
   module.exports = commandline;
 });
 
-// node_modules/lodash/_isPrototype.js
-var require__isPrototype = __commonJS((exports, module) => {
-  var isPrototype = function(value) {
-    var Ctor = value && value.constructor, proto = typeof Ctor == "function" && Ctor.prototype || objectProto;
-    return value === proto;
-  };
-  var objectProto = Object.prototype;
-  module.exports = isPrototype;
-});
-
-// node_modules/lodash/_overArg.js
-var require__overArg = __commonJS((exports, module) => {
-  var overArg = function(func, transform) {
-    return function(arg) {
-      return func(transform(arg));
-    };
-  };
-  module.exports = overArg;
-});
-
-// node_modules/lodash/_nativeKeys.js
-var require__nativeKeys = __commonJS((exports, module) => {
-  var overArg = require__overArg();
-  var nativeKeys = overArg(Object.keys, Object);
-  module.exports = nativeKeys;
-});
-
-// node_modules/lodash/_baseKeys.js
-var require__baseKeys = __commonJS((exports, module) => {
-  var baseKeys = function(object) {
-    if (!isPrototype(object)) {
-      return nativeKeys(object);
-    }
-    var result = [];
-    for (var key in Object(object)) {
-      if (hasOwnProperty.call(object, key) && key != "constructor") {
-        result.push(key);
-      }
-    }
-    return result;
-  };
-  var isPrototype = require__isPrototype();
-  var nativeKeys = require__nativeKeys();
-  var objectProto = Object.prototype;
-  var hasOwnProperty = objectProto.hasOwnProperty;
-  module.exports = baseKeys;
-});
-
-// node_modules/lodash/_freeGlobal.js
-var require__freeGlobal = __commonJS((exports, module) => {
-  var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
-  module.exports = freeGlobal;
-});
-
-// node_modules/lodash/_root.js
-var require__root = __commonJS((exports, module) => {
-  var freeGlobal = require__freeGlobal();
-  var freeSelf = typeof self == "object" && self && self.Object === Object && self;
-  var root = freeGlobal || freeSelf || Function("return this")();
-  module.exports = root;
-});
-
-// node_modules/lodash/_Symbol.js
-var require__Symbol = __commonJS((exports, module) => {
-  var root = require__root();
-  var Symbol2 = root.Symbol;
-  module.exports = Symbol2;
-});
-
-// node_modules/lodash/_getRawTag.js
-var require__getRawTag = __commonJS((exports, module) => {
-  var getRawTag = function(value) {
-    var isOwn = hasOwnProperty.call(value, symToStringTag), tag = value[symToStringTag];
-    try {
-      value[symToStringTag] = undefined;
-      var unmasked = true;
-    } catch (e) {
-    }
-    var result = nativeObjectToString.call(value);
-    if (unmasked) {
-      if (isOwn) {
-        value[symToStringTag] = tag;
-      } else {
-        delete value[symToStringTag];
-      }
-    }
-    return result;
-  };
-  var Symbol2 = require__Symbol();
-  var objectProto = Object.prototype;
-  var hasOwnProperty = objectProto.hasOwnProperty;
-  var nativeObjectToString = objectProto.toString;
-  var symToStringTag = Symbol2 ? Symbol2.toStringTag : undefined;
-  module.exports = getRawTag;
-});
-
-// node_modules/lodash/_objectToString.js
-var require__objectToString = __commonJS((exports, module) => {
-  var objectToString = function(value) {
-    return nativeObjectToString.call(value);
-  };
-  var objectProto = Object.prototype;
-  var nativeObjectToString = objectProto.toString;
-  module.exports = objectToString;
-});
-
-// node_modules/lodash/_baseGetTag.js
-var require__baseGetTag = __commonJS((exports, module) => {
-  var baseGetTag = function(value) {
-    if (value == null) {
-      return value === undefined ? undefinedTag : nullTag;
-    }
-    return symToStringTag && (symToStringTag in Object(value)) ? getRawTag(value) : objectToString(value);
-  };
-  var Symbol2 = require__Symbol();
-  var getRawTag = require__getRawTag();
-  var objectToString = require__objectToString();
-  var nullTag = "[object Null]";
-  var undefinedTag = "[object Undefined]";
-  var symToStringTag = Symbol2 ? Symbol2.toStringTag : undefined;
-  module.exports = baseGetTag;
-});
-
-// node_modules/lodash/isObject.js
-var require_isObject = __commonJS((exports, module) => {
-  var isObject = function(value) {
-    var type = typeof value;
-    return value != null && (type == "object" || type == "function");
-  };
-  module.exports = isObject;
-});
-
-// node_modules/lodash/isFunction.js
-var require_isFunction = __commonJS((exports, module) => {
-  var isFunction = function(value) {
-    if (!isObject(value)) {
-      return false;
-    }
-    var tag = baseGetTag(value);
-    return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
-  };
-  var baseGetTag = require__baseGetTag();
-  var isObject = require_isObject();
-  var asyncTag = "[object AsyncFunction]";
-  var funcTag = "[object Function]";
-  var genTag = "[object GeneratorFunction]";
-  var proxyTag = "[object Proxy]";
-  module.exports = isFunction;
-});
-
-// node_modules/lodash/_coreJsData.js
-var require__coreJsData = __commonJS((exports, module) => {
-  var root = require__root();
-  var coreJsData = root["__core-js_shared__"];
-  module.exports = coreJsData;
-});
-
-// node_modules/lodash/_isMasked.js
-var require__isMasked = __commonJS((exports, module) => {
-  var isMasked = function(func) {
-    return !!maskSrcKey && (maskSrcKey in func);
-  };
-  var coreJsData = require__coreJsData();
-  var maskSrcKey = function() {
-    var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
-    return uid ? "Symbol(src)_1." + uid : "";
-  }();
-  module.exports = isMasked;
-});
-
-// node_modules/lodash/_toSource.js
-var require__toSource = __commonJS((exports, module) => {
-  var toSource = function(func) {
-    if (func != null) {
-      try {
-        return funcToString.call(func);
-      } catch (e) {
-      }
-      try {
-        return func + "";
-      } catch (e) {
-      }
-    }
-    return "";
-  };
-  var funcProto = Function.prototype;
-  var funcToString = funcProto.toString;
-  module.exports = toSource;
-});
-
-// node_modules/lodash/_baseIsNative.js
-var require__baseIsNative = __commonJS((exports, module) => {
-  var baseIsNative = function(value) {
-    if (!isObject(value) || isMasked(value)) {
-      return false;
-    }
-    var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
-    return pattern.test(toSource(value));
-  };
-  var isFunction = require_isFunction();
-  var isMasked = require__isMasked();
-  var isObject = require_isObject();
-  var toSource = require__toSource();
-  var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-  var reIsHostCtor = /^\[object .+?Constructor\]$/;
-  var funcProto = Function.prototype;
-  var objectProto = Object.prototype;
-  var funcToString = funcProto.toString;
-  var hasOwnProperty = objectProto.hasOwnProperty;
-  var reIsNative = RegExp("^" + funcToString.call(hasOwnProperty).replace(reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$");
-  module.exports = baseIsNative;
-});
-
-// node_modules/lodash/_getValue.js
-var require__getValue = __commonJS((exports, module) => {
-  var getValue = function(object, key) {
-    return object == null ? undefined : object[key];
-  };
-  module.exports = getValue;
-});
-
-// node_modules/lodash/_getNative.js
-var require__getNative = __commonJS((exports, module) => {
-  var getNative = function(object, key) {
-    var value = getValue(object, key);
-    return baseIsNative(value) ? value : undefined;
-  };
-  var baseIsNative = require__baseIsNative();
-  var getValue = require__getValue();
-  module.exports = getNative;
-});
-
-// node_modules/lodash/_DataView.js
-var require__DataView = __commonJS((exports, module) => {
-  var getNative = require__getNative();
-  var root = require__root();
-  var DataView = getNative(root, "DataView");
-  module.exports = DataView;
-});
-
-// node_modules/lodash/_Map.js
-var require__Map = __commonJS((exports, module) => {
-  var getNative = require__getNative();
-  var root = require__root();
-  var Map2 = getNative(root, "Map");
-  module.exports = Map2;
-});
-
-// node_modules/lodash/_Promise.js
-var require__Promise = __commonJS((exports, module) => {
-  var getNative = require__getNative();
-  var root = require__root();
-  var Promise2 = getNative(root, "Promise");
-  module.exports = Promise2;
-});
-
-// node_modules/lodash/_Set.js
-var require__Set = __commonJS((exports, module) => {
-  var getNative = require__getNative();
-  var root = require__root();
-  var Set2 = getNative(root, "Set");
-  module.exports = Set2;
-});
-
-// node_modules/lodash/_WeakMap.js
-var require__WeakMap = __commonJS((exports, module) => {
-  var getNative = require__getNative();
-  var root = require__root();
-  var WeakMap2 = getNative(root, "WeakMap");
-  module.exports = WeakMap2;
-});
-
-// node_modules/lodash/_getTag.js
-var require__getTag = __commonJS((exports, module) => {
-  var DataView = require__DataView();
-  var Map2 = require__Map();
-  var Promise2 = require__Promise();
-  var Set2 = require__Set();
-  var WeakMap2 = require__WeakMap();
-  var baseGetTag = require__baseGetTag();
-  var toSource = require__toSource();
-  var mapTag = "[object Map]";
-  var objectTag = "[object Object]";
-  var promiseTag = "[object Promise]";
-  var setTag = "[object Set]";
-  var weakMapTag = "[object WeakMap]";
-  var dataViewTag = "[object DataView]";
-  var dataViewCtorString = toSource(DataView);
-  var mapCtorString = toSource(Map2);
-  var promiseCtorString = toSource(Promise2);
-  var setCtorString = toSource(Set2);
-  var weakMapCtorString = toSource(WeakMap2);
-  var getTag = baseGetTag;
-  if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set2 && getTag(new Set2) != setTag || WeakMap2 && getTag(new WeakMap2) != weakMapTag) {
-    getTag = function(value) {
-      var result = baseGetTag(value), Ctor = result == objectTag ? value.constructor : undefined, ctorString = Ctor ? toSource(Ctor) : "";
-      if (ctorString) {
-        switch (ctorString) {
-          case dataViewCtorString:
-            return dataViewTag;
-          case mapCtorString:
-            return mapTag;
-          case promiseCtorString:
-            return promiseTag;
-          case setCtorString:
-            return setTag;
-          case weakMapCtorString:
-            return weakMapTag;
-        }
-      }
-      return result;
-    };
-  }
-  module.exports = getTag;
-});
-
-// node_modules/lodash/isObjectLike.js
-var require_isObjectLike = __commonJS((exports, module) => {
-  var isObjectLike = function(value) {
-    return value != null && typeof value == "object";
-  };
-  module.exports = isObjectLike;
-});
-
-// node_modules/lodash/_baseIsArguments.js
-var require__baseIsArguments = __commonJS((exports, module) => {
-  var baseIsArguments = function(value) {
-    return isObjectLike(value) && baseGetTag(value) == argsTag;
-  };
-  var baseGetTag = require__baseGetTag();
-  var isObjectLike = require_isObjectLike();
-  var argsTag = "[object Arguments]";
-  module.exports = baseIsArguments;
-});
-
-// node_modules/lodash/isArguments.js
-var require_isArguments = __commonJS((exports, module) => {
-  var baseIsArguments = require__baseIsArguments();
-  var isObjectLike = require_isObjectLike();
-  var objectProto = Object.prototype;
-  var hasOwnProperty = objectProto.hasOwnProperty;
-  var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-  var isArguments = baseIsArguments(function() {
-    return arguments;
-  }()) ? baseIsArguments : function(value) {
-    return isObjectLike(value) && hasOwnProperty.call(value, "callee") && !propertyIsEnumerable.call(value, "callee");
-  };
-  module.exports = isArguments;
-});
-
-// node_modules/lodash/isArray.js
-var require_isArray = __commonJS((exports, module) => {
-  var isArray = Array.isArray;
-  module.exports = isArray;
-});
-
-// node_modules/lodash/isLength.js
-var require_isLength = __commonJS((exports, module) => {
-  var isLength = function(value) {
-    return typeof value == "number" && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-  };
-  var MAX_SAFE_INTEGER = 9007199254740991;
-  module.exports = isLength;
-});
-
-// node_modules/lodash/isArrayLike.js
-var require_isArrayLike = __commonJS((exports, module) => {
-  var isArrayLike = function(value) {
-    return value != null && isLength(value.length) && !isFunction(value);
-  };
-  var isFunction = require_isFunction();
-  var isLength = require_isLength();
-  module.exports = isArrayLike;
-});
-
-// node_modules/lodash/stubFalse.js
-var require_stubFalse = __commonJS((exports, module) => {
-  var stubFalse = function() {
-    return false;
-  };
-  module.exports = stubFalse;
-});
-
-// node_modules/lodash/isBuffer.js
-var require_isBuffer = __commonJS((exports, module) => {
-  var root = require__root();
-  var stubFalse = require_stubFalse();
-  var freeExports = typeof exports == "object" && exports && !exports.nodeType && exports;
-  var freeModule = freeExports && typeof module == "object" && module && !module.nodeType && module;
-  var moduleExports = freeModule && freeModule.exports === freeExports;
-  var Buffer2 = moduleExports ? root.Buffer : undefined;
-  var nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : undefined;
-  var isBuffer = nativeIsBuffer || stubFalse;
-  module.exports = isBuffer;
-});
-
-// node_modules/lodash/_baseIsTypedArray.js
-var require__baseIsTypedArray = __commonJS((exports, module) => {
-  var baseIsTypedArray = function(value) {
-    return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
-  };
-  var baseGetTag = require__baseGetTag();
-  var isLength = require_isLength();
-  var isObjectLike = require_isObjectLike();
-  var argsTag = "[object Arguments]";
-  var arrayTag = "[object Array]";
-  var boolTag = "[object Boolean]";
-  var dateTag = "[object Date]";
-  var errorTag = "[object Error]";
-  var funcTag = "[object Function]";
-  var mapTag = "[object Map]";
-  var numberTag = "[object Number]";
-  var objectTag = "[object Object]";
-  var regexpTag = "[object RegExp]";
-  var setTag = "[object Set]";
-  var stringTag = "[object String]";
-  var weakMapTag = "[object WeakMap]";
-  var arrayBufferTag = "[object ArrayBuffer]";
-  var dataViewTag = "[object DataView]";
-  var float32Tag = "[object Float32Array]";
-  var float64Tag = "[object Float64Array]";
-  var int8Tag = "[object Int8Array]";
-  var int16Tag = "[object Int16Array]";
-  var int32Tag = "[object Int32Array]";
-  var uint8Tag = "[object Uint8Array]";
-  var uint8ClampedTag = "[object Uint8ClampedArray]";
-  var uint16Tag = "[object Uint16Array]";
-  var uint32Tag = "[object Uint32Array]";
-  var typedArrayTags = {};
-  typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
-  typedArrayTags[argsTag] = typedArrayTags[arrayTag] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dataViewTag] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag] = typedArrayTags[mapTag] = typedArrayTags[numberTag] = typedArrayTags[objectTag] = typedArrayTags[regexpTag] = typedArrayTags[setTag] = typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
-  module.exports = baseIsTypedArray;
-});
-
-// node_modules/lodash/_baseUnary.js
-var require__baseUnary = __commonJS((exports, module) => {
-  var baseUnary = function(func) {
-    return function(value) {
-      return func(value);
-    };
-  };
-  module.exports = baseUnary;
-});
-
-// node_modules/lodash/_nodeUtil.js
-var require__nodeUtil = __commonJS((exports, module) => {
-  var freeGlobal = require__freeGlobal();
-  var freeExports = typeof exports == "object" && exports && !exports.nodeType && exports;
-  var freeModule = freeExports && typeof module == "object" && module && !module.nodeType && module;
-  var moduleExports = freeModule && freeModule.exports === freeExports;
-  var freeProcess = moduleExports && freeGlobal.process;
-  var nodeUtil = function() {
-    try {
-      var types = freeModule && freeModule.require && freeModule.require("util").types;
-      if (types) {
-        return types;
-      }
-      return freeProcess && freeProcess.binding && freeProcess.binding("util");
-    } catch (e) {
-    }
-  }();
-  module.exports = nodeUtil;
-});
-
-// node_modules/lodash/isTypedArray.js
-var require_isTypedArray = __commonJS((exports, module) => {
-  var baseIsTypedArray = require__baseIsTypedArray();
-  var baseUnary = require__baseUnary();
-  var nodeUtil = require__nodeUtil();
-  var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
-  var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
-  module.exports = isTypedArray;
-});
-
-// node_modules/lodash/isEmpty.js
-var require_isEmpty = __commonJS((exports, module) => {
-  var isEmpty = function(value) {
-    if (value == null) {
-      return true;
-    }
-    if (isArrayLike(value) && (isArray(value) || typeof value == "string" || typeof value.splice == "function" || isBuffer(value) || isTypedArray(value) || isArguments(value))) {
-      return !value.length;
-    }
-    var tag = getTag(value);
-    if (tag == mapTag || tag == setTag) {
-      return !value.size;
-    }
-    if (isPrototype(value)) {
-      return !baseKeys(value).length;
-    }
-    for (var key in value) {
-      if (hasOwnProperty.call(value, key)) {
-        return false;
-      }
-    }
-    return true;
-  };
-  var baseKeys = require__baseKeys();
-  var getTag = require__getTag();
-  var isArguments = require_isArguments();
-  var isArray = require_isArray();
-  var isArrayLike = require_isArrayLike();
-  var isBuffer = require_isBuffer();
-  var isPrototype = require__isPrototype();
-  var isTypedArray = require_isTypedArray();
-  var mapTag = "[object Map]";
-  var setTag = "[object Set]";
-  var objectProto = Object.prototype;
-  var hasOwnProperty = objectProto.hasOwnProperty;
-  module.exports = isEmpty;
-});
-
 // node_modules/commander/lib/error.js
 var require_error = __commonJS((exports) => {
   class CommanderError extends Error {
@@ -1031,11 +519,11 @@ var require_option = __commonJS((exports) => {
   }
 
   class DualOptions {
-    constructor(options) {
+    constructor(options2) {
       this.positiveOptions = new Map;
       this.negativeOptions = new Map;
       this.dualOptions = new Set;
-      options.forEach((option) => {
+      options2.forEach((option) => {
         if (option.negate) {
           this.negativeOptions.set(option.attributeName(), option);
         } else {
@@ -2330,12 +1818,524 @@ var require_commander = __commonJS((exports, module) => {
   exports.InvalidOptionArgumentError = InvalidArgumentError;
 });
 
+// node_modules/lodash/_isPrototype.js
+var require__isPrototype = __commonJS((exports, module) => {
+  var isPrototype = function(value) {
+    var Ctor = value && value.constructor, proto = typeof Ctor == "function" && Ctor.prototype || objectProto;
+    return value === proto;
+  };
+  var objectProto = Object.prototype;
+  module.exports = isPrototype;
+});
+
+// node_modules/lodash/_overArg.js
+var require__overArg = __commonJS((exports, module) => {
+  var overArg = function(func, transform) {
+    return function(arg) {
+      return func(transform(arg));
+    };
+  };
+  module.exports = overArg;
+});
+
+// node_modules/lodash/_nativeKeys.js
+var require__nativeKeys = __commonJS((exports, module) => {
+  var overArg = require__overArg();
+  var nativeKeys = overArg(Object.keys, Object);
+  module.exports = nativeKeys;
+});
+
+// node_modules/lodash/_baseKeys.js
+var require__baseKeys = __commonJS((exports, module) => {
+  var baseKeys = function(object) {
+    if (!isPrototype(object)) {
+      return nativeKeys(object);
+    }
+    var result = [];
+    for (var key in Object(object)) {
+      if (hasOwnProperty.call(object, key) && key != "constructor") {
+        result.push(key);
+      }
+    }
+    return result;
+  };
+  var isPrototype = require__isPrototype();
+  var nativeKeys = require__nativeKeys();
+  var objectProto = Object.prototype;
+  var hasOwnProperty = objectProto.hasOwnProperty;
+  module.exports = baseKeys;
+});
+
+// node_modules/lodash/_freeGlobal.js
+var require__freeGlobal = __commonJS((exports, module) => {
+  var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
+  module.exports = freeGlobal;
+});
+
+// node_modules/lodash/_root.js
+var require__root = __commonJS((exports, module) => {
+  var freeGlobal = require__freeGlobal();
+  var freeSelf = typeof self == "object" && self && self.Object === Object && self;
+  var root = freeGlobal || freeSelf || Function("return this")();
+  module.exports = root;
+});
+
+// node_modules/lodash/_Symbol.js
+var require__Symbol = __commonJS((exports, module) => {
+  var root = require__root();
+  var Symbol2 = root.Symbol;
+  module.exports = Symbol2;
+});
+
+// node_modules/lodash/_getRawTag.js
+var require__getRawTag = __commonJS((exports, module) => {
+  var getRawTag = function(value) {
+    var isOwn = hasOwnProperty.call(value, symToStringTag), tag = value[symToStringTag];
+    try {
+      value[symToStringTag] = undefined;
+      var unmasked = true;
+    } catch (e) {
+    }
+    var result = nativeObjectToString.call(value);
+    if (unmasked) {
+      if (isOwn) {
+        value[symToStringTag] = tag;
+      } else {
+        delete value[symToStringTag];
+      }
+    }
+    return result;
+  };
+  var Symbol2 = require__Symbol();
+  var objectProto = Object.prototype;
+  var hasOwnProperty = objectProto.hasOwnProperty;
+  var nativeObjectToString = objectProto.toString;
+  var symToStringTag = Symbol2 ? Symbol2.toStringTag : undefined;
+  module.exports = getRawTag;
+});
+
+// node_modules/lodash/_objectToString.js
+var require__objectToString = __commonJS((exports, module) => {
+  var objectToString = function(value) {
+    return nativeObjectToString.call(value);
+  };
+  var objectProto = Object.prototype;
+  var nativeObjectToString = objectProto.toString;
+  module.exports = objectToString;
+});
+
+// node_modules/lodash/_baseGetTag.js
+var require__baseGetTag = __commonJS((exports, module) => {
+  var baseGetTag = function(value) {
+    if (value == null) {
+      return value === undefined ? undefinedTag : nullTag;
+    }
+    return symToStringTag && (symToStringTag in Object(value)) ? getRawTag(value) : objectToString(value);
+  };
+  var Symbol2 = require__Symbol();
+  var getRawTag = require__getRawTag();
+  var objectToString = require__objectToString();
+  var nullTag = "[object Null]";
+  var undefinedTag = "[object Undefined]";
+  var symToStringTag = Symbol2 ? Symbol2.toStringTag : undefined;
+  module.exports = baseGetTag;
+});
+
+// node_modules/lodash/isObject.js
+var require_isObject = __commonJS((exports, module) => {
+  var isObject = function(value) {
+    var type = typeof value;
+    return value != null && (type == "object" || type == "function");
+  };
+  module.exports = isObject;
+});
+
+// node_modules/lodash/isFunction.js
+var require_isFunction = __commonJS((exports, module) => {
+  var isFunction = function(value) {
+    if (!isObject(value)) {
+      return false;
+    }
+    var tag = baseGetTag(value);
+    return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+  };
+  var baseGetTag = require__baseGetTag();
+  var isObject = require_isObject();
+  var asyncTag = "[object AsyncFunction]";
+  var funcTag = "[object Function]";
+  var genTag = "[object GeneratorFunction]";
+  var proxyTag = "[object Proxy]";
+  module.exports = isFunction;
+});
+
+// node_modules/lodash/_coreJsData.js
+var require__coreJsData = __commonJS((exports, module) => {
+  var root = require__root();
+  var coreJsData = root["__core-js_shared__"];
+  module.exports = coreJsData;
+});
+
+// node_modules/lodash/_isMasked.js
+var require__isMasked = __commonJS((exports, module) => {
+  var isMasked = function(func) {
+    return !!maskSrcKey && (maskSrcKey in func);
+  };
+  var coreJsData = require__coreJsData();
+  var maskSrcKey = function() {
+    var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
+    return uid ? "Symbol(src)_1." + uid : "";
+  }();
+  module.exports = isMasked;
+});
+
+// node_modules/lodash/_toSource.js
+var require__toSource = __commonJS((exports, module) => {
+  var toSource = function(func) {
+    if (func != null) {
+      try {
+        return funcToString.call(func);
+      } catch (e) {
+      }
+      try {
+        return func + "";
+      } catch (e) {
+      }
+    }
+    return "";
+  };
+  var funcProto = Function.prototype;
+  var funcToString = funcProto.toString;
+  module.exports = toSource;
+});
+
+// node_modules/lodash/_baseIsNative.js
+var require__baseIsNative = __commonJS((exports, module) => {
+  var baseIsNative = function(value) {
+    if (!isObject(value) || isMasked(value)) {
+      return false;
+    }
+    var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
+    return pattern.test(toSource(value));
+  };
+  var isFunction = require_isFunction();
+  var isMasked = require__isMasked();
+  var isObject = require_isObject();
+  var toSource = require__toSource();
+  var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+  var reIsHostCtor = /^\[object .+?Constructor\]$/;
+  var funcProto = Function.prototype;
+  var objectProto = Object.prototype;
+  var funcToString = funcProto.toString;
+  var hasOwnProperty = objectProto.hasOwnProperty;
+  var reIsNative = RegExp("^" + funcToString.call(hasOwnProperty).replace(reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$");
+  module.exports = baseIsNative;
+});
+
+// node_modules/lodash/_getValue.js
+var require__getValue = __commonJS((exports, module) => {
+  var getValue = function(object, key) {
+    return object == null ? undefined : object[key];
+  };
+  module.exports = getValue;
+});
+
+// node_modules/lodash/_getNative.js
+var require__getNative = __commonJS((exports, module) => {
+  var getNative = function(object, key) {
+    var value = getValue(object, key);
+    return baseIsNative(value) ? value : undefined;
+  };
+  var baseIsNative = require__baseIsNative();
+  var getValue = require__getValue();
+  module.exports = getNative;
+});
+
+// node_modules/lodash/_DataView.js
+var require__DataView = __commonJS((exports, module) => {
+  var getNative = require__getNative();
+  var root = require__root();
+  var DataView = getNative(root, "DataView");
+  module.exports = DataView;
+});
+
+// node_modules/lodash/_Map.js
+var require__Map = __commonJS((exports, module) => {
+  var getNative = require__getNative();
+  var root = require__root();
+  var Map2 = getNative(root, "Map");
+  module.exports = Map2;
+});
+
+// node_modules/lodash/_Promise.js
+var require__Promise = __commonJS((exports, module) => {
+  var getNative = require__getNative();
+  var root = require__root();
+  var Promise2 = getNative(root, "Promise");
+  module.exports = Promise2;
+});
+
+// node_modules/lodash/_Set.js
+var require__Set = __commonJS((exports, module) => {
+  var getNative = require__getNative();
+  var root = require__root();
+  var Set2 = getNative(root, "Set");
+  module.exports = Set2;
+});
+
+// node_modules/lodash/_WeakMap.js
+var require__WeakMap = __commonJS((exports, module) => {
+  var getNative = require__getNative();
+  var root = require__root();
+  var WeakMap2 = getNative(root, "WeakMap");
+  module.exports = WeakMap2;
+});
+
+// node_modules/lodash/_getTag.js
+var require__getTag = __commonJS((exports, module) => {
+  var DataView = require__DataView();
+  var Map2 = require__Map();
+  var Promise2 = require__Promise();
+  var Set2 = require__Set();
+  var WeakMap2 = require__WeakMap();
+  var baseGetTag = require__baseGetTag();
+  var toSource = require__toSource();
+  var mapTag = "[object Map]";
+  var objectTag = "[object Object]";
+  var promiseTag = "[object Promise]";
+  var setTag = "[object Set]";
+  var weakMapTag = "[object WeakMap]";
+  var dataViewTag = "[object DataView]";
+  var dataViewCtorString = toSource(DataView);
+  var mapCtorString = toSource(Map2);
+  var promiseCtorString = toSource(Promise2);
+  var setCtorString = toSource(Set2);
+  var weakMapCtorString = toSource(WeakMap2);
+  var getTag = baseGetTag;
+  if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set2 && getTag(new Set2) != setTag || WeakMap2 && getTag(new WeakMap2) != weakMapTag) {
+    getTag = function(value) {
+      var result = baseGetTag(value), Ctor = result == objectTag ? value.constructor : undefined, ctorString = Ctor ? toSource(Ctor) : "";
+      if (ctorString) {
+        switch (ctorString) {
+          case dataViewCtorString:
+            return dataViewTag;
+          case mapCtorString:
+            return mapTag;
+          case promiseCtorString:
+            return promiseTag;
+          case setCtorString:
+            return setTag;
+          case weakMapCtorString:
+            return weakMapTag;
+        }
+      }
+      return result;
+    };
+  }
+  module.exports = getTag;
+});
+
+// node_modules/lodash/isObjectLike.js
+var require_isObjectLike = __commonJS((exports, module) => {
+  var isObjectLike = function(value) {
+    return value != null && typeof value == "object";
+  };
+  module.exports = isObjectLike;
+});
+
+// node_modules/lodash/_baseIsArguments.js
+var require__baseIsArguments = __commonJS((exports, module) => {
+  var baseIsArguments = function(value) {
+    return isObjectLike(value) && baseGetTag(value) == argsTag;
+  };
+  var baseGetTag = require__baseGetTag();
+  var isObjectLike = require_isObjectLike();
+  var argsTag = "[object Arguments]";
+  module.exports = baseIsArguments;
+});
+
+// node_modules/lodash/isArguments.js
+var require_isArguments = __commonJS((exports, module) => {
+  var baseIsArguments = require__baseIsArguments();
+  var isObjectLike = require_isObjectLike();
+  var objectProto = Object.prototype;
+  var hasOwnProperty = objectProto.hasOwnProperty;
+  var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+  var isArguments = baseIsArguments(function() {
+    return arguments;
+  }()) ? baseIsArguments : function(value) {
+    return isObjectLike(value) && hasOwnProperty.call(value, "callee") && !propertyIsEnumerable.call(value, "callee");
+  };
+  module.exports = isArguments;
+});
+
+// node_modules/lodash/isArray.js
+var require_isArray = __commonJS((exports, module) => {
+  var isArray = Array.isArray;
+  module.exports = isArray;
+});
+
+// node_modules/lodash/isLength.js
+var require_isLength = __commonJS((exports, module) => {
+  var isLength = function(value) {
+    return typeof value == "number" && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+  };
+  var MAX_SAFE_INTEGER = 9007199254740991;
+  module.exports = isLength;
+});
+
+// node_modules/lodash/isArrayLike.js
+var require_isArrayLike = __commonJS((exports, module) => {
+  var isArrayLike = function(value) {
+    return value != null && isLength(value.length) && !isFunction(value);
+  };
+  var isFunction = require_isFunction();
+  var isLength = require_isLength();
+  module.exports = isArrayLike;
+});
+
+// node_modules/lodash/stubFalse.js
+var require_stubFalse = __commonJS((exports, module) => {
+  var stubFalse = function() {
+    return false;
+  };
+  module.exports = stubFalse;
+});
+
+// node_modules/lodash/isBuffer.js
+var require_isBuffer = __commonJS((exports, module) => {
+  var root = require__root();
+  var stubFalse = require_stubFalse();
+  var freeExports = typeof exports == "object" && exports && !exports.nodeType && exports;
+  var freeModule = freeExports && typeof module == "object" && module && !module.nodeType && module;
+  var moduleExports = freeModule && freeModule.exports === freeExports;
+  var Buffer2 = moduleExports ? root.Buffer : undefined;
+  var nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : undefined;
+  var isBuffer = nativeIsBuffer || stubFalse;
+  module.exports = isBuffer;
+});
+
+// node_modules/lodash/_baseIsTypedArray.js
+var require__baseIsTypedArray = __commonJS((exports, module) => {
+  var baseIsTypedArray = function(value) {
+    return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+  };
+  var baseGetTag = require__baseGetTag();
+  var isLength = require_isLength();
+  var isObjectLike = require_isObjectLike();
+  var argsTag = "[object Arguments]";
+  var arrayTag = "[object Array]";
+  var boolTag = "[object Boolean]";
+  var dateTag = "[object Date]";
+  var errorTag = "[object Error]";
+  var funcTag = "[object Function]";
+  var mapTag = "[object Map]";
+  var numberTag = "[object Number]";
+  var objectTag = "[object Object]";
+  var regexpTag = "[object RegExp]";
+  var setTag = "[object Set]";
+  var stringTag = "[object String]";
+  var weakMapTag = "[object WeakMap]";
+  var arrayBufferTag = "[object ArrayBuffer]";
+  var dataViewTag = "[object DataView]";
+  var float32Tag = "[object Float32Array]";
+  var float64Tag = "[object Float64Array]";
+  var int8Tag = "[object Int8Array]";
+  var int16Tag = "[object Int16Array]";
+  var int32Tag = "[object Int32Array]";
+  var uint8Tag = "[object Uint8Array]";
+  var uint8ClampedTag = "[object Uint8ClampedArray]";
+  var uint16Tag = "[object Uint16Array]";
+  var uint32Tag = "[object Uint32Array]";
+  var typedArrayTags = {};
+  typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
+  typedArrayTags[argsTag] = typedArrayTags[arrayTag] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dataViewTag] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag] = typedArrayTags[mapTag] = typedArrayTags[numberTag] = typedArrayTags[objectTag] = typedArrayTags[regexpTag] = typedArrayTags[setTag] = typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
+  module.exports = baseIsTypedArray;
+});
+
+// node_modules/lodash/_baseUnary.js
+var require__baseUnary = __commonJS((exports, module) => {
+  var baseUnary = function(func) {
+    return function(value) {
+      return func(value);
+    };
+  };
+  module.exports = baseUnary;
+});
+
+// node_modules/lodash/_nodeUtil.js
+var require__nodeUtil = __commonJS((exports, module) => {
+  var freeGlobal = require__freeGlobal();
+  var freeExports = typeof exports == "object" && exports && !exports.nodeType && exports;
+  var freeModule = freeExports && typeof module == "object" && module && !module.nodeType && module;
+  var moduleExports = freeModule && freeModule.exports === freeExports;
+  var freeProcess = moduleExports && freeGlobal.process;
+  var nodeUtil = function() {
+    try {
+      var types = freeModule && freeModule.require && freeModule.require("util").types;
+      if (types) {
+        return types;
+      }
+      return freeProcess && freeProcess.binding && freeProcess.binding("util");
+    } catch (e) {
+    }
+  }();
+  module.exports = nodeUtil;
+});
+
+// node_modules/lodash/isTypedArray.js
+var require_isTypedArray = __commonJS((exports, module) => {
+  var baseIsTypedArray = require__baseIsTypedArray();
+  var baseUnary = require__baseUnary();
+  var nodeUtil = require__nodeUtil();
+  var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+  var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
+  module.exports = isTypedArray;
+});
+
+// node_modules/lodash/isEmpty.js
+var require_isEmpty = __commonJS((exports, module) => {
+  var isEmpty = function(value) {
+    if (value == null) {
+      return true;
+    }
+    if (isArrayLike(value) && (isArray(value) || typeof value == "string" || typeof value.splice == "function" || isBuffer(value) || isTypedArray(value) || isArguments(value))) {
+      return !value.length;
+    }
+    var tag = getTag(value);
+    if (tag == mapTag || tag == setTag) {
+      return !value.size;
+    }
+    if (isPrototype(value)) {
+      return !baseKeys(value).length;
+    }
+    for (var key in value) {
+      if (hasOwnProperty.call(value, key)) {
+        return false;
+      }
+    }
+    return true;
+  };
+  var baseKeys = require__baseKeys();
+  var getTag = require__getTag();
+  var isArguments = require_isArguments();
+  var isArray = require_isArray();
+  var isArrayLike = require_isArrayLike();
+  var isBuffer = require_isBuffer();
+  var isPrototype = require__isPrototype();
+  var isTypedArray = require_isTypedArray();
+  var mapTag = "[object Map]";
+  var setTag = "[object Set]";
+  var objectProto = Object.prototype;
+  var hasOwnProperty = objectProto.hasOwnProperty;
+  module.exports = isEmpty;
+});
+
 // node_modules/cli-table3/src/debug.js
 var require_debug = __commonJS((exports, module) => {
   var messages = [];
-  var level = 0;
+  var level2 = 0;
   var debug2 = (msg, min) => {
-    if (level >= min) {
+    if (level2 >= min) {
       messages.push(msg);
     }
   };
@@ -2346,7 +2346,7 @@ var require_debug = __commonJS((exports, module) => {
     messages = [];
   };
   debug2.setDebugLevel = (v) => {
-    level = v;
+    level2 = v;
   };
   debug2.warn = (msg) => debug2(msg, debug2.WARN);
   debug2.info = (msg) => debug2(msg, debug2.INFO);
@@ -2802,25 +2802,25 @@ var require_has_flag = __commonJS((exports, module) => {
 
 // node_modules/@colors/colors/lib/system/supports-colors.js
 var require_supports_colors = __commonJS((exports, module) => {
-  var translateLevel2 = function(level) {
-    if (level === 0) {
+  var translateLevel = function(level2) {
+    if (level2 === 0) {
       return false;
     }
     return {
-      level,
+      level: level2,
       hasBasic: true,
-      has256: level >= 2,
-      has16m: level >= 3
+      has256: level2 >= 2,
+      has16m: level2 >= 3
     };
   };
   var supportsColor2 = function(stream) {
     if (forceColor === false) {
       return 0;
     }
-    if (hasFlag2("color=16m") || hasFlag2("color=full") || hasFlag2("color=truecolor")) {
+    if (hasFlag("color=16m") || hasFlag("color=full") || hasFlag("color=truecolor")) {
       return 3;
     }
-    if (hasFlag2("color=256")) {
+    if (hasFlag("color=256")) {
       return 2;
     }
     if (stream && !stream.isTTY && forceColor !== true) {
@@ -2828,26 +2828,26 @@ var require_supports_colors = __commonJS((exports, module) => {
     }
     var min = forceColor ? 1 : 0;
     if (process.platform === "win32") {
-      var osRelease = os2.release().split(".");
+      var osRelease = os.release().split(".");
       if (Number(process.versions.node.split(".")[0]) >= 8 && Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
         return Number(osRelease[2]) >= 14931 ? 3 : 2;
       }
       return 1;
     }
-    if ("CI" in env2) {
+    if ("CI" in env) {
       if (["TRAVIS", "CIRCLECI", "APPVEYOR", "GITLAB_CI"].some(function(sign) {
-        return sign in env2;
-      }) || env2.CI_NAME === "codeship") {
+        return sign in env;
+      }) || env.CI_NAME === "codeship") {
         return 1;
       }
       return min;
     }
-    if ("TEAMCITY_VERSION" in env2) {
-      return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env2.TEAMCITY_VERSION) ? 1 : 0;
+    if ("TEAMCITY_VERSION" in env) {
+      return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
     }
-    if ("TERM_PROGRAM" in env2) {
-      var version2 = parseInt((env2.TERM_PROGRAM_VERSION || "").split(".")[0], 10);
-      switch (env2.TERM_PROGRAM) {
+    if ("TERM_PROGRAM" in env) {
+      var version2 = parseInt((env.TERM_PROGRAM_VERSION || "").split(".")[0], 10);
+      switch (env.TERM_PROGRAM) {
         case "iTerm.app":
           return version2 >= 3 ? 3 : 2;
         case "Hyper":
@@ -2856,35 +2856,35 @@ var require_supports_colors = __commonJS((exports, module) => {
           return 2;
       }
     }
-    if (/-256(color)?$/i.test(env2.TERM)) {
+    if (/-256(color)?$/i.test(env.TERM)) {
       return 2;
     }
-    if (/^screen|^xterm|^vt100|^rxvt|color|ansi|cygwin|linux/i.test(env2.TERM)) {
+    if (/^screen|^xterm|^vt100|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
       return 1;
     }
-    if ("COLORTERM" in env2) {
+    if ("COLORTERM" in env) {
       return 1;
     }
-    if (env2.TERM === "dumb") {
+    if (env.TERM === "dumb") {
       return min;
     }
     return min;
   };
   var getSupportLevel = function(stream) {
-    var level = supportsColor2(stream);
-    return translateLevel2(level);
+    var level2 = supportsColor2(stream);
+    return translateLevel(level2);
   };
-  var os2 = import.meta.require("os");
-  var hasFlag2 = require_has_flag();
-  var env2 = process.env;
+  var os = import.meta.require("os");
+  var hasFlag = require_has_flag();
+  var env = process.env;
   var forceColor = undefined;
-  if (hasFlag2("no-color") || hasFlag2("no-colors") || hasFlag2("color=false")) {
+  if (hasFlag("no-color") || hasFlag("no-colors") || hasFlag("color=false")) {
     forceColor = false;
-  } else if (hasFlag2("color") || hasFlag2("colors") || hasFlag2("color=true") || hasFlag2("color=always")) {
+  } else if (hasFlag("color") || hasFlag("colors") || hasFlag("color=true") || hasFlag("color=always")) {
     forceColor = true;
   }
-  if ("FORCE_COLOR" in env2) {
-    forceColor = env2.FORCE_COLOR.length === 0 || parseInt(env2.FORCE_COLOR, 10) !== 0;
+  if ("FORCE_COLOR" in env) {
+    forceColor = env.FORCE_COLOR.length === 0 || parseInt(env.FORCE_COLOR, 10) !== 0;
   }
   module.exports = {
     supportsColor: getSupportLevel,
@@ -10200,7 +10200,7 @@ var require_redeyed = __commonJS((exports, module) => {
             return;
           return root._default ? root._default[key] : undefined;
         }
-        function process3(key) {
+        function process2(key) {
           var value = node[key];
           if (!value)
             return;
@@ -10220,10 +10220,10 @@ var require_redeyed = __commonJS((exports, module) => {
           throw new Error("nodes need to be either {String}, {Object} or {Function}." + value + " is neither.");
         }
         if (node._default)
-          process3("_default");
+          process2("_default");
         Object.keys(node).filter(function(key) {
           return isNonCircular(key) && node.hasOwnProperty(key) && key !== "_before" && key !== "_after" && key !== "_default";
-        }).forEach(process3);
+        }).forEach(process2);
       }
       function functionize(node) {
         Object.keys(node).filter(function(key) {
@@ -10306,7 +10306,7 @@ var require_redeyed = __commonJS((exports, module) => {
           }
           throw new Error("Token %s not found at or after index: %d", tkn, start2);
         }
-        function process3(surround2) {
+        function process2(surround2) {
           var result;
           var currentIndex;
           var nextIndex;
@@ -10331,7 +10331,7 @@ var require_redeyed = __commonJS((exports, module) => {
           if (start2 >= end2)
             return;
           if (surround2) {
-            result = process3(surround2);
+            result = process2(surround2);
             skip = result.skip;
             lastSplitEnd = result.splitEnd;
           } else {
@@ -22272,1840 +22272,20 @@ var require_skin_tone = __commonJS((exports, module) => {
   };
 });
 
-// node_modules/has-flag/index.js
-var require_has_flag2 = __commonJS((exports, module) => {
-  module.exports = (flag, argv = process.argv) => {
-    const prefix = flag.startsWith("-") ? "" : flag.length === 1 ? "-" : "--";
-    const position = argv.indexOf(prefix + flag);
-    const terminatorPosition = argv.indexOf("--");
-    return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
-  };
-});
-
-// node_modules/supports-color/index.js
-var require_supports_color = __commonJS((exports, module) => {
-  var translateLevel2 = function(level) {
-    if (level === 0) {
-      return false;
-    }
-    return {
-      level,
-      hasBasic: true,
-      has256: level >= 2,
-      has16m: level >= 3
-    };
-  };
-  var supportsColor2 = function(haveStream, streamIsTTY) {
-    if (forceColor === 0) {
-      return 0;
-    }
-    if (hasFlag2("color=16m") || hasFlag2("color=full") || hasFlag2("color=truecolor")) {
-      return 3;
-    }
-    if (hasFlag2("color=256")) {
-      return 2;
-    }
-    if (haveStream && !streamIsTTY && forceColor === undefined) {
-      return 0;
-    }
-    const min = forceColor || 0;
-    if (env2.TERM === "dumb") {
-      return min;
-    }
-    if (process.platform === "win32") {
-      const osRelease = os2.release().split(".");
-      if (Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
-        return Number(osRelease[2]) >= 14931 ? 3 : 2;
-      }
-      return 1;
-    }
-    if ("CI" in env2) {
-      if (["TRAVIS", "CIRCLECI", "APPVEYOR", "GITLAB_CI", "GITHUB_ACTIONS", "BUILDKITE"].some((sign) => (sign in env2)) || env2.CI_NAME === "codeship") {
-        return 1;
-      }
-      return min;
-    }
-    if ("TEAMCITY_VERSION" in env2) {
-      return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env2.TEAMCITY_VERSION) ? 1 : 0;
-    }
-    if (env2.COLORTERM === "truecolor") {
-      return 3;
-    }
-    if ("TERM_PROGRAM" in env2) {
-      const version2 = parseInt((env2.TERM_PROGRAM_VERSION || "").split(".")[0], 10);
-      switch (env2.TERM_PROGRAM) {
-        case "iTerm.app":
-          return version2 >= 3 ? 3 : 2;
-        case "Apple_Terminal":
-          return 2;
-      }
-    }
-    if (/-256(color)?$/i.test(env2.TERM)) {
-      return 2;
-    }
-    if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env2.TERM)) {
-      return 1;
-    }
-    if ("COLORTERM" in env2) {
-      return 1;
-    }
-    return min;
-  };
-  var getSupportLevel = function(stream) {
-    const level = supportsColor2(stream, stream && stream.isTTY);
-    return translateLevel2(level);
-  };
-  var os2 = import.meta.require("os");
-  var tty2 = import.meta.require("tty");
-  var hasFlag2 = require_has_flag2();
-  var { env: env2 } = process;
-  var forceColor;
-  if (hasFlag2("no-color") || hasFlag2("no-colors") || hasFlag2("color=false") || hasFlag2("color=never")) {
-    forceColor = 0;
-  } else if (hasFlag2("color") || hasFlag2("colors") || hasFlag2("color=true") || hasFlag2("color=always")) {
-    forceColor = 1;
-  }
-  if ("FORCE_COLOR" in env2) {
-    if (env2.FORCE_COLOR === "true") {
-      forceColor = 1;
-    } else if (env2.FORCE_COLOR === "false") {
-      forceColor = 0;
-    } else {
-      forceColor = env2.FORCE_COLOR.length === 0 ? 1 : Math.min(parseInt(env2.FORCE_COLOR, 10), 3);
-    }
-  }
+// node_modules/supports-hyperlinks/browser.js
+var require_browser = __commonJS((exports, module) => {
   module.exports = {
-    supportsColor: getSupportLevel,
-    stdout: translateLevel2(supportsColor2(true, tty2.isatty(1))),
-    stderr: translateLevel2(supportsColor2(true, tty2.isatty(2)))
-  };
-});
-
-// node_modules/supports-hyperlinks/index.js
-var require_supports_hyperlinks = __commonJS((exports, module) => {
-  var parseVersion = function(versionString) {
-    if (/^\d{3,4}$/.test(versionString)) {
-      const m = /(\d{1,2})(\d{2})/.exec(versionString) || [];
-      return {
-        major: 0,
-        minor: parseInt(m[1], 10),
-        patch: parseInt(m[2], 10)
-      };
-    }
-    const versions = (versionString || "").split(".").map((n) => parseInt(n, 10));
-    return {
-      major: versions[0],
-      minor: versions[1],
-      patch: versions[2]
-    };
-  };
-  var supportsHyperlink = function(stream) {
-    const {
-      CI,
-      FORCE_HYPERLINK,
-      NETLIFY,
-      TEAMCITY_VERSION,
-      TERM_PROGRAM,
-      TERM_PROGRAM_VERSION,
-      VTE_VERSION
-    } = process.env;
-    if (FORCE_HYPERLINK) {
-      return !(FORCE_HYPERLINK.length > 0 && parseInt(FORCE_HYPERLINK, 10) === 0);
-    }
-    if (hasFlag2("no-hyperlink") || hasFlag2("no-hyperlinks") || hasFlag2("hyperlink=false") || hasFlag2("hyperlink=never")) {
+    stdin: false,
+    stderr: false,
+    supportsHyperlink: function() {
       return false;
     }
-    if (hasFlag2("hyperlink=true") || hasFlag2("hyperlink=always")) {
-      return true;
-    }
-    if (NETLIFY) {
-      return true;
-    }
-    if (!supportsColor2.supportsColor(stream)) {
-      return false;
-    }
-    if (stream && !stream.isTTY) {
-      return false;
-    }
-    if (process.platform === "win32") {
-      return false;
-    }
-    if (CI) {
-      return false;
-    }
-    if (TEAMCITY_VERSION) {
-      return false;
-    }
-    if (TERM_PROGRAM) {
-      const version2 = parseVersion(TERM_PROGRAM_VERSION || "");
-      switch (TERM_PROGRAM) {
-        case "iTerm.app":
-          if (version2.major === 3) {
-            return version2.minor >= 1;
-          }
-          return version2.major > 3;
-        case "WezTerm":
-          return version2.major >= 20200620;
-        case "vscode":
-          return version2.major > 1 || version2.major === 1 && version2.minor >= 72;
-      }
-    }
-    if (VTE_VERSION) {
-      if (VTE_VERSION === "0.50.0") {
-        return false;
-      }
-      const version2 = parseVersion(VTE_VERSION);
-      return version2.major > 0 || version2.minor >= 50;
-    }
-    return false;
-  };
-  var supportsColor2 = require_supports_color();
-  var hasFlag2 = require_has_flag2();
-  module.exports = {
-    supportsHyperlink,
-    stdout: supportsHyperlink(process.stdout),
-    stderr: supportsHyperlink(process.stderr)
   };
 });
 
 // src/index.ts
 var import_node_cmd = __toESM(require_cmd(), 1);
 import readline from "readline";
-
-// node_modules/openai/version.mjs
-var VERSION = "4.14.1";
-
-// node_modules/openai/_shims/registry.mjs
-function setShims(shims, options = { auto: false }) {
-  if (auto) {
-    throw new Error(`you must \`import 'openai/shims/${shims.kind}'\` before importing anything else from openai`);
-  }
-  if (kind) {
-    throw new Error(`can't \`import 'openai/shims/${shims.kind}'\` after \`import 'openai/shims/${kind}'\``);
-  }
-  auto = options.auto;
-  kind = shims.kind;
-  fetch2 = shims.fetch;
-  Request2 = shims.Request;
-  Response2 = shims.Response;
-  Headers2 = shims.Headers;
-  FormData2 = shims.FormData;
-  Blob2 = shims.Blob;
-  File2 = shims.File;
-  ReadableStream2 = shims.ReadableStream;
-  getMultipartRequestOptions = shims.getMultipartRequestOptions;
-  getDefaultAgent = shims.getDefaultAgent;
-  fileFromPath = shims.fileFromPath;
-  isFsReadStream = shims.isFsReadStream;
-}
-var auto = false;
-var kind = undefined;
-var fetch2 = undefined;
-var Request2 = undefined;
-var Response2 = undefined;
-var Headers2 = undefined;
-var FormData2 = undefined;
-var Blob2 = undefined;
-var File2 = undefined;
-var ReadableStream2 = undefined;
-var getMultipartRequestOptions = undefined;
-var getDefaultAgent = undefined;
-var fileFromPath = undefined;
-var isFsReadStream = undefined;
-
-// node_modules/openai/_shims/MultipartBody.mjs
-class MultipartBody {
-  constructor(body) {
-    this.body = body;
-  }
-  get [Symbol.toStringTag]() {
-    return "MultipartBody";
-  }
-}
-
-// node_modules/openai/_shims/web-runtime.mjs
-function getRuntime({ manuallyImported } = {}) {
-  const recommendation = manuallyImported ? `You may need to use polyfills` : `Add one of these imports before your first \`import \u2026 from 'openai'\`:
-- \`import 'openai/shims/node'\` (if you're running on Node)
-- \`import 'openai/shims/web'\` (otherwise)
-`;
-  let _fetch, _Request, _Response, _Headers;
-  try {
-    _fetch = fetch;
-    _Request = Request;
-    _Response = Response;
-    _Headers = Headers;
-  } catch (error) {
-    throw new Error(`this environment is missing the following Web Fetch API type: ${error.message}. ${recommendation}`);
-  }
-  return {
-    kind: "web",
-    fetch: _fetch,
-    Request: _Request,
-    Response: _Response,
-    Headers: _Headers,
-    FormData: typeof FormData !== "undefined" ? FormData : class FormData3 {
-      constructor() {
-        throw new Error(`file uploads aren't supported in this environment yet as 'FormData' is undefined. ${recommendation}`);
-      }
-    },
-    Blob: typeof Blob !== "undefined" ? Blob : class Blob3 {
-      constructor() {
-        throw new Error(`file uploads aren't supported in this environment yet as 'Blob' is undefined. ${recommendation}`);
-      }
-    },
-    File: typeof File !== "undefined" ? File : class File3 {
-      constructor() {
-        throw new Error(`file uploads aren't supported in this environment yet as 'File' is undefined. ${recommendation}`);
-      }
-    },
-    ReadableStream: typeof ReadableStream !== "undefined" ? ReadableStream : class ReadableStream3 {
-      constructor() {
-        throw new Error(`streaming isn't supported in this environment yet as 'ReadableStream' is undefined. ${recommendation}`);
-      }
-    },
-    getMultipartRequestOptions: async (form, opts) => ({
-      ...opts,
-      body: new MultipartBody(form)
-    }),
-    getDefaultAgent: (url) => {
-      return;
-    },
-    fileFromPath: () => {
-      throw new Error("The `fileFromPath` function is only supported in Node. See the README for more details: https://www.github.com/openai/openai-node#file-uploads");
-    },
-    isFsReadStream: (value) => false
-  };
-}
-
-// node_modules/openai/_shims/bun-runtime.mjs
-import {ReadStream as FsReadStream} from "fs";
-function getRuntime2() {
-  const runtime = getRuntime();
-  function isFsReadStream2(value) {
-    return value instanceof FsReadStream;
-  }
-  return { ...runtime, isFsReadStream: isFsReadStream2 };
-}
-
-// node_modules/openai/_shims/index.mjs
-if (!kind)
-  setShims(getRuntime2(), { auto: true });
-
-// node_modules/openai/error.mjs
-class OpenAIError extends Error {
-}
-
-class APIError extends OpenAIError {
-  constructor(status, error, message, headers) {
-    super(`${APIError.makeMessage(status, error, message)}`);
-    this.status = status;
-    this.headers = headers;
-    const data = error;
-    this.error = data;
-    this.code = data?.["code"];
-    this.param = data?.["param"];
-    this.type = data?.["type"];
-  }
-  static makeMessage(status, error, message) {
-    const msg = error?.message ? typeof error.message === "string" ? error.message : JSON.stringify(error.message) : error ? JSON.stringify(error) : message;
-    if (status && msg) {
-      return `${status} ${msg}`;
-    }
-    if (status) {
-      return `${status} status code (no body)`;
-    }
-    if (msg) {
-      return msg;
-    }
-    return "(no status code or body)";
-  }
-  static generate(status, errorResponse, message, headers) {
-    if (!status) {
-      return new APIConnectionError({ cause: castToError(errorResponse) });
-    }
-    const error = errorResponse?.["error"];
-    if (status === 400) {
-      return new BadRequestError(status, error, message, headers);
-    }
-    if (status === 401) {
-      return new AuthenticationError(status, error, message, headers);
-    }
-    if (status === 403) {
-      return new PermissionDeniedError(status, error, message, headers);
-    }
-    if (status === 404) {
-      return new NotFoundError(status, error, message, headers);
-    }
-    if (status === 409) {
-      return new ConflictError(status, error, message, headers);
-    }
-    if (status === 422) {
-      return new UnprocessableEntityError(status, error, message, headers);
-    }
-    if (status === 429) {
-      return new RateLimitError(status, error, message, headers);
-    }
-    if (status >= 500) {
-      return new InternalServerError(status, error, message, headers);
-    }
-    return new APIError(status, error, message, headers);
-  }
-}
-
-class APIUserAbortError extends APIError {
-  constructor({ message } = {}) {
-    super(undefined, undefined, message || "Request was aborted.", undefined);
-    this.status = undefined;
-  }
-}
-
-class APIConnectionError extends APIError {
-  constructor({ message, cause }) {
-    super(undefined, undefined, message || "Connection error.", undefined);
-    this.status = undefined;
-    if (cause)
-      this.cause = cause;
-  }
-}
-
-class APIConnectionTimeoutError extends APIConnectionError {
-  constructor({ message } = {}) {
-    super({ message: message ?? "Request timed out." });
-  }
-}
-
-class BadRequestError extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 400;
-  }
-}
-
-class AuthenticationError extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 401;
-  }
-}
-
-class PermissionDeniedError extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 403;
-  }
-}
-
-class NotFoundError extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 404;
-  }
-}
-
-class ConflictError extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 409;
-  }
-}
-
-class UnprocessableEntityError extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 422;
-  }
-}
-
-class RateLimitError extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 429;
-  }
-}
-
-class InternalServerError extends APIError {
-}
-
-// node_modules/openai/streaming.mjs
-var partition = function(str, delimiter) {
-  const index = str.indexOf(delimiter);
-  if (index !== -1) {
-    return [str.substring(0, index), delimiter, str.substring(index + delimiter.length)];
-  }
-  return [str, "", ""];
-};
-var readableStreamAsyncIterable = function(stream) {
-  if (stream[Symbol.asyncIterator])
-    return stream;
-  const reader = stream.getReader();
-  return {
-    async next() {
-      try {
-        const result = await reader.read();
-        if (result?.done)
-          reader.releaseLock();
-        return result;
-      } catch (e) {
-        reader.releaseLock();
-        throw e;
-      }
-    },
-    async return() {
-      const cancelPromise = reader.cancel();
-      reader.releaseLock();
-      await cancelPromise;
-      return { done: true, value: undefined };
-    },
-    [Symbol.asyncIterator]() {
-      return this;
-    }
-  };
-};
-
-class Stream {
-  constructor(iterator, controller) {
-    this.iterator = iterator;
-    this.controller = controller;
-  }
-  static fromSSEResponse(response, controller) {
-    let consumed = false;
-    const decoder = new SSEDecoder;
-    async function* iterMessages() {
-      if (!response.body) {
-        controller.abort();
-        throw new OpenAIError(`Attempted to iterate over a response with no body`);
-      }
-      const lineDecoder = new LineDecoder;
-      const iter = readableStreamAsyncIterable(response.body);
-      for await (const chunk of iter) {
-        for (const line of lineDecoder.decode(chunk)) {
-          const sse = decoder.decode(line);
-          if (sse)
-            yield sse;
-        }
-      }
-      for (const line of lineDecoder.flush()) {
-        const sse = decoder.decode(line);
-        if (sse)
-          yield sse;
-      }
-    }
-    async function* iterator() {
-      if (consumed) {
-        throw new Error("Cannot iterate over a consumed stream, use `.tee()` to split the stream.");
-      }
-      consumed = true;
-      let done = false;
-      try {
-        for await (const sse of iterMessages()) {
-          if (done)
-            continue;
-          if (sse.data.startsWith("[DONE]")) {
-            done = true;
-            continue;
-          }
-          if (sse.event === null) {
-            let data;
-            try {
-              data = JSON.parse(sse.data);
-            } catch (e) {
-              console.error(`Could not parse message into JSON:`, sse.data);
-              console.error(`From chunk:`, sse.raw);
-              throw e;
-            }
-            if (data && data.error) {
-              throw new APIError(undefined, data.error, undefined, undefined);
-            }
-            yield data;
-          }
-        }
-        done = true;
-      } catch (e) {
-        if (e instanceof Error && e.name === "AbortError")
-          return;
-        throw e;
-      } finally {
-        if (!done)
-          controller.abort();
-      }
-    }
-    return new Stream(iterator, controller);
-  }
-  static fromReadableStream(readableStream, controller) {
-    let consumed = false;
-    async function* iterLines() {
-      const lineDecoder = new LineDecoder;
-      const iter = readableStreamAsyncIterable(readableStream);
-      for await (const chunk of iter) {
-        for (const line of lineDecoder.decode(chunk)) {
-          yield line;
-        }
-      }
-      for (const line of lineDecoder.flush()) {
-        yield line;
-      }
-    }
-    async function* iterator() {
-      if (consumed) {
-        throw new Error("Cannot iterate over a consumed stream, use `.tee()` to split the stream.");
-      }
-      consumed = true;
-      let done = false;
-      try {
-        for await (const line of iterLines()) {
-          if (done)
-            continue;
-          if (line)
-            yield JSON.parse(line);
-        }
-        done = true;
-      } catch (e) {
-        if (e instanceof Error && e.name === "AbortError")
-          return;
-        throw e;
-      } finally {
-        if (!done)
-          controller.abort();
-      }
-    }
-    return new Stream(iterator, controller);
-  }
-  [Symbol.asyncIterator]() {
-    return this.iterator();
-  }
-  tee() {
-    const left = [];
-    const right = [];
-    const iterator = this.iterator();
-    const teeIterator = (queue) => {
-      return {
-        next: () => {
-          if (queue.length === 0) {
-            const result = iterator.next();
-            left.push(result);
-            right.push(result);
-          }
-          return queue.shift();
-        }
-      };
-    };
-    return [
-      new Stream(() => teeIterator(left), this.controller),
-      new Stream(() => teeIterator(right), this.controller)
-    ];
-  }
-  toReadableStream() {
-    const self2 = this;
-    let iter;
-    const encoder = new TextEncoder;
-    return new ReadableStream2({
-      async start() {
-        iter = self2[Symbol.asyncIterator]();
-      },
-      async pull(ctrl) {
-        try {
-          const { value, done } = await iter.next();
-          if (done)
-            return ctrl.close();
-          const bytes = encoder.encode(JSON.stringify(value) + "\n");
-          ctrl.enqueue(bytes);
-        } catch (err) {
-          ctrl.error(err);
-        }
-      },
-      async cancel() {
-        await iter.return?.();
-      }
-    });
-  }
-}
-
-class SSEDecoder {
-  constructor() {
-    this.event = null;
-    this.data = [];
-    this.chunks = [];
-  }
-  decode(line) {
-    if (line.endsWith("\r")) {
-      line = line.substring(0, line.length - 1);
-    }
-    if (!line) {
-      if (!this.event && !this.data.length)
-        return null;
-      const sse = {
-        event: this.event,
-        data: this.data.join("\n"),
-        raw: this.chunks
-      };
-      this.event = null;
-      this.data = [];
-      this.chunks = [];
-      return sse;
-    }
-    this.chunks.push(line);
-    if (line.startsWith(":")) {
-      return null;
-    }
-    let [fieldname, _, value] = partition(line, ":");
-    if (value.startsWith(" ")) {
-      value = value.substring(1);
-    }
-    if (fieldname === "event") {
-      this.event = value;
-    } else if (fieldname === "data") {
-      this.data.push(value);
-    }
-    return null;
-  }
-}
-
-class LineDecoder {
-  constructor() {
-    this.buffer = [];
-    this.trailingCR = false;
-  }
-  decode(chunk) {
-    let text = this.decodeText(chunk);
-    if (this.trailingCR) {
-      text = "\r" + text;
-      this.trailingCR = false;
-    }
-    if (text.endsWith("\r")) {
-      this.trailingCR = true;
-      text = text.slice(0, -1);
-    }
-    if (!text) {
-      return [];
-    }
-    const trailingNewline = LineDecoder.NEWLINE_CHARS.has(text[text.length - 1] || "");
-    let lines = text.split(LineDecoder.NEWLINE_REGEXP);
-    if (lines.length === 1 && !trailingNewline) {
-      this.buffer.push(lines[0]);
-      return [];
-    }
-    if (this.buffer.length > 0) {
-      lines = [this.buffer.join("") + lines[0], ...lines.slice(1)];
-      this.buffer = [];
-    }
-    if (!trailingNewline) {
-      this.buffer = [lines.pop() || ""];
-    }
-    return lines;
-  }
-  decodeText(bytes) {
-    if (bytes == null)
-      return "";
-    if (typeof bytes === "string")
-      return bytes;
-    if (typeof Buffer !== "undefined") {
-      if (bytes instanceof Buffer) {
-        return bytes.toString();
-      }
-      if (bytes instanceof Uint8Array) {
-        return Buffer.from(bytes).toString();
-      }
-      throw new OpenAIError(`Unexpected: received non-Uint8Array (${bytes.constructor.name}) stream chunk in an environment with a global "Buffer" defined, which this library assumes to be Node. Please report this error.`);
-    }
-    if (typeof TextDecoder !== "undefined") {
-      if (bytes instanceof Uint8Array || bytes instanceof ArrayBuffer) {
-        this.textDecoder ?? (this.textDecoder = new TextDecoder("utf8"));
-        return this.textDecoder.decode(bytes);
-      }
-      throw new OpenAIError(`Unexpected: received non-Uint8Array/ArrayBuffer (${bytes.constructor.name}) in a web platform. Please report this error.`);
-    }
-    throw new OpenAIError(`Unexpected: neither Buffer nor TextDecoder are available as globals. Please report this error.`);
-  }
-  flush() {
-    if (!this.buffer.length && !this.trailingCR) {
-      return [];
-    }
-    const lines = [this.buffer.join("")];
-    this.buffer = [];
-    this.trailingCR = false;
-    return lines;
-  }
-}
-LineDecoder.NEWLINE_CHARS = new Set(["\n", "\r", "\v", "\f", "\x1C", "\x1D", "\x1E", "\x85", "\u2028", "\u2029"]);
-LineDecoder.NEWLINE_REGEXP = /\r\n|[\n\r\x0b\x0c\x1c\x1d\x1e\x85\u2028\u2029]/g;
-
-// node_modules/openai/uploads.mjs
-async function toFile(value, name, options = {}) {
-  value = await value;
-  if (isResponseLike(value)) {
-    const blob = await value.blob();
-    name || (name = new URL(value.url).pathname.split(/[\\/]/).pop() ?? "unknown_file");
-    return new File2([blob], name, options);
-  }
-  const bits = await getBytes(value);
-  name || (name = getName(value) ?? "unknown_file");
-  if (!options.type) {
-    const type = bits[0]?.type;
-    if (typeof type === "string") {
-      options = { ...options, type };
-    }
-  }
-  return new File2(bits, name, options);
-}
-async function getBytes(value) {
-  let parts = [];
-  if (typeof value === "string" || ArrayBuffer.isView(value) || value instanceof ArrayBuffer) {
-    parts.push(value);
-  } else if (isBlobLike(value)) {
-    parts.push(await value.arrayBuffer());
-  } else if (isAsyncIterableIterator(value)) {
-    for await (const chunk of value) {
-      parts.push(chunk);
-    }
-  } else {
-    throw new Error(`Unexpected data type: ${typeof value}; constructor: ${value?.constructor?.name}; props: ${propsForError(value)}`);
-  }
-  return parts;
-}
-var propsForError = function(value) {
-  const props = Object.getOwnPropertyNames(value);
-  return `[${props.map((p) => `"${p}"`).join(", ")}]`;
-};
-var getName = function(value) {
-  return getStringFromMaybeBuffer(value.name) || getStringFromMaybeBuffer(value.filename) || getStringFromMaybeBuffer(value.path)?.split(/[\\/]/).pop();
-};
-var isResponseLike = (value) => value != null && typeof value === "object" && typeof value.url === "string" && typeof value.blob === "function";
-var isFileLike = (value) => value != null && typeof value === "object" && typeof value.name === "string" && typeof value.lastModified === "number" && isBlobLike(value);
-var isBlobLike = (value) => value != null && typeof value === "object" && typeof value.size === "number" && typeof value.type === "string" && typeof value.text === "function" && typeof value.slice === "function" && typeof value.arrayBuffer === "function";
-var isUploadable = (value) => {
-  return isFileLike(value) || isResponseLike(value) || isFsReadStream(value);
-};
-var getStringFromMaybeBuffer = (x) => {
-  if (typeof x === "string")
-    return x;
-  if (typeof Buffer !== "undefined" && x instanceof Buffer)
-    return String(x);
-  return;
-};
-var isAsyncIterableIterator = (value) => value != null && typeof value === "object" && typeof value[Symbol.asyncIterator] === "function";
-var isMultipartBody = (body) => body && typeof body === "object" && body.body && body[Symbol.toStringTag] === "MultipartBody";
-var multipartFormRequestOptions = async (opts) => {
-  const form = await createForm(opts.body);
-  return getMultipartRequestOptions(form, opts);
-};
-var createForm = async (body) => {
-  const form = new FormData2;
-  await Promise.all(Object.entries(body || {}).map(([key, value]) => addFormValue(form, key, value)));
-  return form;
-};
-var addFormValue = async (form, key, value) => {
-  if (value === undefined)
-    return;
-  if (value == null) {
-    throw new TypeError(`Received null for "${key}"; to pass null in FormData, you must use the string 'null'`);
-  }
-  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
-    form.append(key, String(value));
-  } else if (isUploadable(value)) {
-    const file = await toFile(value);
-    form.append(key, file);
-  } else if (Array.isArray(value)) {
-    await Promise.all(value.map((entry) => addFormValue(form, key + "[]", entry)));
-  } else if (typeof value === "object") {
-    await Promise.all(Object.entries(value).map(([name, prop]) => addFormValue(form, `${key}[${name}]`, prop)));
-  } else {
-    throw new TypeError(`Invalid value given to form, expected a string, number, boolean, object, Array, File or Blob but got ${value} instead`);
-  }
-};
-
-// node_modules/openai/core.mjs
-async function defaultParseResponse(props) {
-  const { response } = props;
-  if (props.options.stream) {
-    debug("response", response.status, response.url, response.headers, response.body);
-    return Stream.fromSSEResponse(response, props.controller);
-  }
-  if (response.status === 204) {
-    return null;
-  }
-  const contentType = response.headers.get("content-type");
-  if (contentType?.includes("application/json")) {
-    const json = await response.json();
-    debug("response", response.status, response.url, response.headers, json);
-    return json;
-  }
-  const text = await response.text();
-  debug("response", response.status, response.url, response.headers, text);
-  return text;
-}
-var getBrowserInfo = function() {
-  if (typeof navigator === "undefined" || !navigator) {
-    return null;
-  }
-  const browserPatterns = [
-    { key: "edge", pattern: /Edge(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
-    { key: "ie", pattern: /MSIE(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
-    { key: "ie", pattern: /Trident(?:.*rv\:(\d+)\.(\d+)(?:\.(\d+))?)?/ },
-    { key: "chrome", pattern: /Chrome(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
-    { key: "firefox", pattern: /Firefox(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
-    { key: "safari", pattern: /(?:Version\W+(\d+)\.(\d+)(?:\.(\d+))?)?(?:\W+Mobile\S*)?\W+Safari/ }
-  ];
-  for (const { key, pattern } of browserPatterns) {
-    const match = pattern.exec(navigator.userAgent);
-    if (match) {
-      const major = match[1] || 0;
-      const minor = match[2] || 0;
-      const patch = match[3] || 0;
-      return { browser: key, version: `${major}.${minor}.${patch}` };
-    }
-  }
-  return null;
-};
-function isEmptyObj(obj) {
-  if (!obj)
-    return true;
-  for (const _k in obj)
-    return false;
-  return true;
-}
-function hasOwn(obj, key) {
-  return Object.prototype.hasOwnProperty.call(obj, key);
-}
-function debug(action, ...args) {
-  if (typeof process !== "undefined" && process.env["DEBUG"] === "true") {
-    console.log(`OpenAI:DEBUG:${action}`, ...args);
-  }
-}
-var __classPrivateFieldSet = function(receiver, state, value, kind2, f) {
-  if (kind2 === "m")
-    throw new TypeError("Private method is not writable");
-  if (kind2 === "a" && !f)
-    throw new TypeError("Private accessor was defined without a setter");
-  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
-    throw new TypeError("Cannot write private member to an object whose class did not declare it");
-  return kind2 === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value), value;
-};
-var __classPrivateFieldGet = function(receiver, state, kind2, f) {
-  if (kind2 === "a" && !f)
-    throw new TypeError("Private accessor was defined without a getter");
-  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
-    throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind2 === "m" ? f : kind2 === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-};
-var _AbstractPage_client;
-
-class APIPromise extends Promise {
-  constructor(responsePromise, parseResponse = defaultParseResponse) {
-    super((resolve) => {
-      resolve(null);
-    });
-    this.responsePromise = responsePromise;
-    this.parseResponse = parseResponse;
-  }
-  _thenUnwrap(transform) {
-    return new APIPromise(this.responsePromise, async (props) => transform(await this.parseResponse(props)));
-  }
-  asResponse() {
-    return this.responsePromise.then((p) => p.response);
-  }
-  async withResponse() {
-    const [data, response] = await Promise.all([this.parse(), this.asResponse()]);
-    return { data, response };
-  }
-  parse() {
-    if (!this.parsedPromise) {
-      this.parsedPromise = this.responsePromise.then(this.parseResponse);
-    }
-    return this.parsedPromise;
-  }
-  then(onfulfilled, onrejected) {
-    return this.parse().then(onfulfilled, onrejected);
-  }
-  catch(onrejected) {
-    return this.parse().catch(onrejected);
-  }
-  finally(onfinally) {
-    return this.parse().finally(onfinally);
-  }
-}
-
-class APIClient {
-  constructor({
-    baseURL,
-    maxRetries = 2,
-    timeout = 600000,
-    httpAgent,
-    fetch: overridenFetch
-  }) {
-    this.baseURL = baseURL;
-    this.maxRetries = validatePositiveInteger("maxRetries", maxRetries);
-    this.timeout = validatePositiveInteger("timeout", timeout);
-    this.httpAgent = httpAgent;
-    this.fetch = overridenFetch ?? fetch2;
-  }
-  authHeaders(opts) {
-    return {};
-  }
-  defaultHeaders(opts) {
-    return {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "User-Agent": this.getUserAgent(),
-      ...getPlatformHeaders(),
-      ...this.authHeaders(opts)
-    };
-  }
-  validateHeaders(headers, customHeaders) {
-  }
-  defaultIdempotencyKey() {
-    return `stainless-node-retry-${uuid4()}`;
-  }
-  get(path, opts) {
-    return this.methodRequest("get", path, opts);
-  }
-  post(path, opts) {
-    return this.methodRequest("post", path, opts);
-  }
-  patch(path, opts) {
-    return this.methodRequest("patch", path, opts);
-  }
-  put(path, opts) {
-    return this.methodRequest("put", path, opts);
-  }
-  delete(path, opts) {
-    return this.methodRequest("delete", path, opts);
-  }
-  methodRequest(method, path, opts) {
-    return this.request(Promise.resolve(opts).then((opts2) => ({ method, path, ...opts2 })));
-  }
-  getAPIList(path, Page, opts) {
-    return this.requestAPIList(Page, { method: "get", path, ...opts });
-  }
-  calculateContentLength(body) {
-    if (typeof body === "string") {
-      if (typeof Buffer !== "undefined") {
-        return Buffer.byteLength(body, "utf8").toString();
-      }
-      if (typeof TextEncoder !== "undefined") {
-        const encoder = new TextEncoder;
-        const encoded = encoder.encode(body);
-        return encoded.length.toString();
-      }
-    }
-    return null;
-  }
-  buildRequest(options) {
-    const { method, path, query, headers = {} } = options;
-    const body = isMultipartBody(options.body) ? options.body.body : options.body ? JSON.stringify(options.body, null, 2) : null;
-    const contentLength = this.calculateContentLength(body);
-    const url = this.buildURL(path, query);
-    if ("timeout" in options)
-      validatePositiveInteger("timeout", options.timeout);
-    const timeout = options.timeout ?? this.timeout;
-    const httpAgent = options.httpAgent ?? this.httpAgent ?? getDefaultAgent(url);
-    const minAgentTimeout = timeout + 1000;
-    if (typeof httpAgent?.options?.timeout === "number" && minAgentTimeout > (httpAgent.options.timeout ?? 0)) {
-      httpAgent.options.timeout = minAgentTimeout;
-    }
-    if (this.idempotencyHeader && method !== "get") {
-      if (!options.idempotencyKey)
-        options.idempotencyKey = this.defaultIdempotencyKey();
-      headers[this.idempotencyHeader] = options.idempotencyKey;
-    }
-    const reqHeaders = {
-      ...contentLength && { "Content-Length": contentLength },
-      ...this.defaultHeaders(options),
-      ...headers
-    };
-    if (isMultipartBody(options.body) && kind !== "node") {
-      delete reqHeaders["Content-Type"];
-    }
-    Object.keys(reqHeaders).forEach((key) => reqHeaders[key] === null && delete reqHeaders[key]);
-    const req = {
-      method,
-      ...body && { body },
-      headers: reqHeaders,
-      ...httpAgent && { agent: httpAgent },
-      signal: options.signal ?? null
-    };
-    this.validateHeaders(reqHeaders, headers);
-    return { req, url, timeout };
-  }
-  async prepareRequest(request, { url, options }) {
-  }
-  parseHeaders(headers) {
-    return !headers ? {} : (Symbol.iterator in headers) ? Object.fromEntries(Array.from(headers).map((header) => [...header])) : { ...headers };
-  }
-  makeStatusError(status, error4, message, headers) {
-    return APIError.generate(status, error4, message, headers);
-  }
-  request(options, remainingRetries = null) {
-    return new APIPromise(this.makeRequest(options, remainingRetries));
-  }
-  async makeRequest(optionsInput, retriesRemaining) {
-    const options = await optionsInput;
-    if (retriesRemaining == null) {
-      retriesRemaining = options.maxRetries ?? this.maxRetries;
-    }
-    const { req, url, timeout } = this.buildRequest(options);
-    await this.prepareRequest(req, { url, options });
-    debug("request", url, options, req.headers);
-    if (options.signal?.aborted) {
-      throw new APIUserAbortError;
-    }
-    const controller = new AbortController;
-    const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
-    if (response instanceof Error) {
-      if (options.signal?.aborted) {
-        throw new APIUserAbortError;
-      }
-      if (retriesRemaining) {
-        return this.retryRequest(options, retriesRemaining);
-      }
-      if (response.name === "AbortError") {
-        throw new APIConnectionTimeoutError;
-      }
-      throw new APIConnectionError({ cause: response });
-    }
-    const responseHeaders = createResponseHeaders(response.headers);
-    if (!response.ok) {
-      if (retriesRemaining && this.shouldRetry(response)) {
-        return this.retryRequest(options, retriesRemaining, responseHeaders);
-      }
-      const errText = await response.text().catch((e) => castToError(e).message);
-      const errJSON = safeJSON(errText);
-      const errMessage = errJSON ? undefined : errText;
-      debug("response", response.status, url, responseHeaders, errMessage);
-      const err = this.makeStatusError(response.status, errJSON, errMessage, responseHeaders);
-      throw err;
-    }
-    return { response, options, controller };
-  }
-  requestAPIList(Page, options) {
-    const request = this.makeRequest(options, null);
-    return new PagePromise(this, request, Page);
-  }
-  buildURL(path, query) {
-    const url = isAbsoluteURL(path) ? new URL(path) : new URL(this.baseURL + (this.baseURL.endsWith("/") && path.startsWith("/") ? path.slice(1) : path));
-    const defaultQuery = this.defaultQuery();
-    if (!isEmptyObj(defaultQuery)) {
-      query = { ...defaultQuery, ...query };
-    }
-    if (query) {
-      url.search = this.stringifyQuery(query);
-    }
-    return url.toString();
-  }
-  stringifyQuery(query) {
-    return Object.entries(query).filter(([_, value]) => typeof value !== "undefined").map(([key, value]) => {
-      if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
-        return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-      }
-      if (value === null) {
-        return `${encodeURIComponent(key)}=`;
-      }
-      throw new OpenAIError(`Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`);
-    }).join("&");
-  }
-  async fetchWithTimeout(url, init, ms, controller) {
-    const { signal, ...options } = init || {};
-    if (signal)
-      signal.addEventListener("abort", () => controller.abort());
-    const timeout = setTimeout(() => controller.abort(), ms);
-    return this.getRequestClient().fetch.call(undefined, url, { signal: controller.signal, ...options }).finally(() => {
-      clearTimeout(timeout);
-    });
-  }
-  getRequestClient() {
-    return { fetch: this.fetch };
-  }
-  shouldRetry(response) {
-    const shouldRetryHeader = response.headers.get("x-should-retry");
-    if (shouldRetryHeader === "true")
-      return true;
-    if (shouldRetryHeader === "false")
-      return false;
-    if (response.status === 408)
-      return true;
-    if (response.status === 409)
-      return true;
-    if (response.status === 429)
-      return true;
-    if (response.status >= 500)
-      return true;
-    return false;
-  }
-  async retryRequest(options, retriesRemaining, responseHeaders) {
-    let timeoutMillis;
-    const retryAfterHeader = responseHeaders?.["retry-after"];
-    if (retryAfterHeader) {
-      const timeoutSeconds = parseInt(retryAfterHeader);
-      if (!Number.isNaN(timeoutSeconds)) {
-        timeoutMillis = timeoutSeconds * 1000;
-      } else {
-        timeoutMillis = Date.parse(retryAfterHeader) - Date.now();
-      }
-    }
-    if (!timeoutMillis || !Number.isInteger(timeoutMillis) || timeoutMillis <= 0 || timeoutMillis > 60 * 1000) {
-      const maxRetries = options.maxRetries ?? this.maxRetries;
-      timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
-    }
-    await sleep(timeoutMillis);
-    return this.makeRequest(options, retriesRemaining - 1);
-  }
-  calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries) {
-    const initialRetryDelay = 0.5;
-    const maxRetryDelay = 8;
-    const numRetries = maxRetries - retriesRemaining;
-    const sleepSeconds = Math.min(initialRetryDelay * Math.pow(2, numRetries), maxRetryDelay);
-    const jitter = 1 - Math.random() * 0.25;
-    return sleepSeconds * jitter * 1000;
-  }
-  getUserAgent() {
-    return `${this.constructor.name}/JS ${VERSION}`;
-  }
-}
-class AbstractPage {
-  constructor(client, response, body, options) {
-    _AbstractPage_client.set(this, undefined);
-    __classPrivateFieldSet(this, _AbstractPage_client, client, "f");
-    this.options = options;
-    this.response = response;
-    this.body = body;
-  }
-  hasNextPage() {
-    const items = this.getPaginatedItems();
-    if (!items.length)
-      return false;
-    return this.nextPageInfo() != null;
-  }
-  async getNextPage() {
-    const nextInfo = this.nextPageInfo();
-    if (!nextInfo) {
-      throw new OpenAIError("No next page expected; please check `.hasNextPage()` before calling `.getNextPage()`.");
-    }
-    const nextOptions = { ...this.options };
-    if ("params" in nextInfo) {
-      nextOptions.query = { ...nextOptions.query, ...nextInfo.params };
-    } else if ("url" in nextInfo) {
-      const params = [...Object.entries(nextOptions.query || {}), ...nextInfo.url.searchParams.entries()];
-      for (const [key, value] of params) {
-        nextInfo.url.searchParams.set(key, value);
-      }
-      nextOptions.query = undefined;
-      nextOptions.path = nextInfo.url.toString();
-    }
-    return await __classPrivateFieldGet(this, _AbstractPage_client, "f").requestAPIList(this.constructor, nextOptions);
-  }
-  async* iterPages() {
-    let page = this;
-    yield page;
-    while (page.hasNextPage()) {
-      page = await page.getNextPage();
-      yield page;
-    }
-  }
-  async* [(_AbstractPage_client = new WeakMap, Symbol.asyncIterator)]() {
-    for await (const page of this.iterPages()) {
-      for (const item of page.getPaginatedItems()) {
-        yield item;
-      }
-    }
-  }
-}
-
-class PagePromise extends APIPromise {
-  constructor(client, request, Page) {
-    super(request, async (props) => new Page(client, props.response, await defaultParseResponse(props), props.options));
-  }
-  async* [Symbol.asyncIterator]() {
-    const page = await this;
-    for await (const item of page) {
-      yield item;
-    }
-  }
-}
-var createResponseHeaders = (headers) => {
-  return new Proxy(Object.fromEntries(headers.entries()), {
-    get(target, name) {
-      const key = name.toString();
-      return target[key.toLowerCase()] || target[key];
-    }
-  });
-};
-var requestOptionsKeys = {
-  method: true,
-  path: true,
-  query: true,
-  body: true,
-  headers: true,
-  maxRetries: true,
-  stream: true,
-  timeout: true,
-  httpAgent: true,
-  signal: true,
-  idempotencyKey: true
-};
-var isRequestOptions = (obj) => {
-  return typeof obj === "object" && obj !== null && !isEmptyObj(obj) && Object.keys(obj).every((k) => hasOwn(requestOptionsKeys, k));
-};
-var getPlatformProperties = () => {
-  if (typeof Deno !== "undefined" && Deno.build != null) {
-    return {
-      "X-Stainless-Lang": "js",
-      "X-Stainless-Package-Version": VERSION,
-      "X-Stainless-OS": normalizePlatform(Deno.build.os),
-      "X-Stainless-Arch": normalizeArch(Deno.build.arch),
-      "X-Stainless-Runtime": "deno",
-      "X-Stainless-Runtime-Version": Deno.version
-    };
-  }
-  if (typeof EdgeRuntime !== "undefined") {
-    return {
-      "X-Stainless-Lang": "js",
-      "X-Stainless-Package-Version": VERSION,
-      "X-Stainless-OS": "Unknown",
-      "X-Stainless-Arch": `other:${EdgeRuntime}`,
-      "X-Stainless-Runtime": "edge",
-      "X-Stainless-Runtime-Version": process.version
-    };
-  }
-  if (Object.prototype.toString.call(typeof process !== "undefined" ? process : 0) === "[object process]") {
-    return {
-      "X-Stainless-Lang": "js",
-      "X-Stainless-Package-Version": VERSION,
-      "X-Stainless-OS": normalizePlatform(process.platform),
-      "X-Stainless-Arch": normalizeArch(process.arch),
-      "X-Stainless-Runtime": "node",
-      "X-Stainless-Runtime-Version": process.version
-    };
-  }
-  const browserInfo = getBrowserInfo();
-  if (browserInfo) {
-    return {
-      "X-Stainless-Lang": "js",
-      "X-Stainless-Package-Version": VERSION,
-      "X-Stainless-OS": "Unknown",
-      "X-Stainless-Arch": "unknown",
-      "X-Stainless-Runtime": `browser:${browserInfo.browser}`,
-      "X-Stainless-Runtime-Version": browserInfo.version
-    };
-  }
-  return {
-    "X-Stainless-Lang": "js",
-    "X-Stainless-Package-Version": VERSION,
-    "X-Stainless-OS": "Unknown",
-    "X-Stainless-Arch": "unknown",
-    "X-Stainless-Runtime": "unknown",
-    "X-Stainless-Runtime-Version": "unknown"
-  };
-};
-var normalizeArch = (arch) => {
-  if (arch === "x32")
-    return "x32";
-  if (arch === "x86_64" || arch === "x64")
-    return "x64";
-  if (arch === "arm")
-    return "arm";
-  if (arch === "aarch64" || arch === "arm64")
-    return "arm64";
-  if (arch)
-    return `other:${arch}`;
-  return "unknown";
-};
-var normalizePlatform = (platform) => {
-  platform = platform.toLowerCase();
-  if (platform.includes("ios"))
-    return "iOS";
-  if (platform === "android")
-    return "Android";
-  if (platform === "darwin")
-    return "MacOS";
-  if (platform === "win32")
-    return "Windows";
-  if (platform === "freebsd")
-    return "FreeBSD";
-  if (platform === "openbsd")
-    return "OpenBSD";
-  if (platform === "linux")
-    return "Linux";
-  if (platform)
-    return `Other:${platform}`;
-  return "Unknown";
-};
-var _platformHeaders;
-var getPlatformHeaders = () => {
-  return _platformHeaders ?? (_platformHeaders = getPlatformProperties());
-};
-var safeJSON = (text) => {
-  try {
-    return JSON.parse(text);
-  } catch (err) {
-    return;
-  }
-};
-var startsWithSchemeRegexp = new RegExp("^(?:[a-z]+:)?//", "i");
-var isAbsoluteURL = (url) => {
-  return startsWithSchemeRegexp.test(url);
-};
-var sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-var validatePositiveInteger = (name, n) => {
-  if (typeof n !== "number" || !Number.isInteger(n)) {
-    throw new OpenAIError(`${name} must be an integer`);
-  }
-  if (n < 0) {
-    throw new OpenAIError(`${name} must be a positive integer`);
-  }
-  return n;
-};
-var castToError = (err) => {
-  if (err instanceof Error)
-    return err;
-  return new Error(err);
-};
-var readEnv = (env) => {
-  if (typeof process !== "undefined") {
-    return process.env?.[env] ?? undefined;
-  }
-  if (typeof Deno !== "undefined") {
-    return Deno.env?.get?.(env);
-  }
-  return;
-};
-var uuid4 = () => {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-    const r = Math.random() * 16 | 0;
-    const v = c === "x" ? r : r & 3 | 8;
-    return v.toString(16);
-  });
-};
-var isRunningInBrowser = () => {
-  return typeof window !== "undefined" && typeof window.document !== "undefined" && typeof navigator !== "undefined";
-};
-
-// node_modules/openai/pagination.mjs
-class Page extends AbstractPage {
-  constructor(client, response, body, options) {
-    super(client, response, body, options);
-    this.data = body.data;
-    this.object = body.object;
-  }
-  getPaginatedItems() {
-    return this.data;
-  }
-  nextPageParams() {
-    return null;
-  }
-  nextPageInfo() {
-    return null;
-  }
-}
-
-class CursorPage extends AbstractPage {
-  constructor(client, response, body, options) {
-    super(client, response, body, options);
-    this.data = body.data;
-  }
-  getPaginatedItems() {
-    return this.data;
-  }
-  nextPageParams() {
-    const info = this.nextPageInfo();
-    if (!info)
-      return null;
-    if ("params" in info)
-      return info.params;
-    const params = Object.fromEntries(info.url.searchParams);
-    if (!Object.keys(params).length)
-      return null;
-    return params;
-  }
-  nextPageInfo() {
-    if (!this.data?.length) {
-      return null;
-    }
-    const next = this.data[this.data.length - 1]?.id;
-    if (!next)
-      return null;
-    return { params: { after: next } };
-  }
-}
-
-// node_modules/openai/resource.mjs
-class APIResource {
-  constructor(client) {
-    this.client = client;
-    this.get = client.get.bind(client);
-    this.post = client.post.bind(client);
-    this.patch = client.patch.bind(client);
-    this.put = client.put.bind(client);
-    this.delete = client.delete.bind(client);
-    this.getAPIList = client.getAPIList.bind(client);
-  }
-}
-
-// node_modules/openai/resources/chat/completions.mjs
-class Completions extends APIResource {
-  create(body, options) {
-    return this.post("/chat/completions", { body, ...options, stream: body.stream ?? false });
-  }
-}
-(function(Completions2) {
-})(Completions || (Completions = {}));
-
-// node_modules/openai/resources/chat/chat.mjs
-class Chat extends APIResource {
-  constructor() {
-    super(...arguments);
-    this.completions = new Completions(this.client);
-  }
-}
-(function(Chat2) {
-  Chat2.Completions = Completions;
-})(Chat || (Chat = {}));
-// node_modules/openai/resources/audio/transcriptions.mjs
-class Transcriptions extends APIResource {
-  create(body, options) {
-    return this.post("/audio/transcriptions", multipartFormRequestOptions({ body, ...options }));
-  }
-}
-(function(Transcriptions2) {
-})(Transcriptions || (Transcriptions = {}));
-
-// node_modules/openai/resources/audio/translations.mjs
-class Translations extends APIResource {
-  create(body, options) {
-    return this.post("/audio/translations", multipartFormRequestOptions({ body, ...options }));
-  }
-}
-(function(Translations2) {
-})(Translations || (Translations = {}));
-
-// node_modules/openai/resources/audio/audio.mjs
-class Audio extends APIResource {
-  constructor() {
-    super(...arguments);
-    this.transcriptions = new Transcriptions(this.client);
-    this.translations = new Translations(this.client);
-  }
-}
-(function(Audio2) {
-  Audio2.Transcriptions = Transcriptions;
-  Audio2.Translations = Translations;
-})(Audio || (Audio = {}));
-// node_modules/openai/resources/completions.mjs
-class Completions2 extends APIResource {
-  create(body, options) {
-    return this.post("/completions", { body, ...options, stream: body.stream ?? false });
-  }
-}
-(function(Completions3) {
-})(Completions2 || (Completions2 = {}));
-// node_modules/openai/resources/embeddings.mjs
-class Embeddings extends APIResource {
-  create(body, options) {
-    return this.post("/embeddings", { body, ...options });
-  }
-}
-(function(Embeddings2) {
-})(Embeddings || (Embeddings = {}));
-// node_modules/openai/resources/edits.mjs
-class Edits extends APIResource {
-  create(body, options) {
-    return this.post("/edits", { body, ...options });
-  }
-}
-(function(Edits2) {
-})(Edits || (Edits = {}));
-// node_modules/openai/resources/files.mjs
-class Files extends APIResource {
-  create(body, options) {
-    return this.post("/files", multipartFormRequestOptions({ body, ...options }));
-  }
-  retrieve(fileId, options) {
-    return this.get(`/files/${fileId}`, options);
-  }
-  list(options) {
-    return this.getAPIList("/files", FileObjectsPage, options);
-  }
-  del(fileId, options) {
-    return this.delete(`/files/${fileId}`, options);
-  }
-  retrieveContent(fileId, options) {
-    return this.get(`/files/${fileId}/content`, {
-      ...options,
-      headers: { Accept: "application/json", ...options?.headers }
-    });
-  }
-  async waitForProcessing(id, { pollInterval = 5000, maxWait = 30 * 60 * 1000 } = {}) {
-    const TERMINAL_STATES = new Set(["processed", "error", "deleted"]);
-    const start = Date.now();
-    let file = await this.retrieve(id);
-    while (!file.status || !TERMINAL_STATES.has(file.status)) {
-      await sleep(pollInterval);
-      file = await this.retrieve(id);
-      if (Date.now() - start > maxWait) {
-        throw new APIConnectionTimeoutError({
-          message: `Giving up on waiting for file ${id} to finish processing after ${maxWait} milliseconds.`
-        });
-      }
-    }
-    return file;
-  }
-}
-
-class FileObjectsPage extends Page {
-}
-(function(Files2) {
-  Files2.FileObjectsPage = FileObjectsPage;
-})(Files || (Files = {}));
-// node_modules/openai/resources/fine-tunes.mjs
-class FineTunes extends APIResource {
-  create(body, options) {
-    return this.post("/fine-tunes", { body, ...options });
-  }
-  retrieve(fineTuneId, options) {
-    return this.get(`/fine-tunes/${fineTuneId}`, options);
-  }
-  list(options) {
-    return this.getAPIList("/fine-tunes", FineTunesPage, options);
-  }
-  cancel(fineTuneId, options) {
-    return this.post(`/fine-tunes/${fineTuneId}/cancel`, options);
-  }
-  listEvents(fineTuneId, query, options) {
-    return this.get(`/fine-tunes/${fineTuneId}/events`, {
-      query,
-      timeout: 86400000,
-      ...options,
-      stream: query?.stream ?? false
-    });
-  }
-}
-
-class FineTunesPage extends Page {
-}
-(function(FineTunes2) {
-  FineTunes2.FineTunesPage = FineTunesPage;
-})(FineTunes || (FineTunes = {}));
-// node_modules/openai/resources/fine-tuning/jobs.mjs
-class Jobs extends APIResource {
-  create(body, options) {
-    return this.post("/fine_tuning/jobs", { body, ...options });
-  }
-  retrieve(fineTuningJobId, options) {
-    return this.get(`/fine_tuning/jobs/${fineTuningJobId}`, options);
-  }
-  list(query = {}, options) {
-    if (isRequestOptions(query)) {
-      return this.list({}, query);
-    }
-    return this.getAPIList("/fine_tuning/jobs", FineTuningJobsPage, { query, ...options });
-  }
-  cancel(fineTuningJobId, options) {
-    return this.post(`/fine_tuning/jobs/${fineTuningJobId}/cancel`, options);
-  }
-  listEvents(fineTuningJobId, query = {}, options) {
-    if (isRequestOptions(query)) {
-      return this.listEvents(fineTuningJobId, {}, query);
-    }
-    return this.getAPIList(`/fine_tuning/jobs/${fineTuningJobId}/events`, FineTuningJobEventsPage, {
-      query,
-      ...options
-    });
-  }
-}
-
-class FineTuningJobsPage extends CursorPage {
-}
-
-class FineTuningJobEventsPage extends CursorPage {
-}
-(function(Jobs2) {
-  Jobs2.FineTuningJobsPage = FineTuningJobsPage;
-  Jobs2.FineTuningJobEventsPage = FineTuningJobEventsPage;
-})(Jobs || (Jobs = {}));
-
-// node_modules/openai/resources/fine-tuning/fine-tuning.mjs
-class FineTuning extends APIResource {
-  constructor() {
-    super(...arguments);
-    this.jobs = new Jobs(this.client);
-  }
-}
-(function(FineTuning2) {
-  FineTuning2.Jobs = Jobs;
-  FineTuning2.FineTuningJobsPage = FineTuningJobsPage;
-  FineTuning2.FineTuningJobEventsPage = FineTuningJobEventsPage;
-})(FineTuning || (FineTuning = {}));
-// node_modules/openai/resources/images.mjs
-class Images extends APIResource {
-  createVariation(body, options) {
-    return this.post("/images/variations", multipartFormRequestOptions({ body, ...options }));
-  }
-  edit(body, options) {
-    return this.post("/images/edits", multipartFormRequestOptions({ body, ...options }));
-  }
-  generate(body, options) {
-    return this.post("/images/generations", { body, ...options });
-  }
-}
-(function(Images2) {
-})(Images || (Images = {}));
-// node_modules/openai/resources/models.mjs
-class Models extends APIResource {
-  retrieve(model, options) {
-    return this.get(`/models/${model}`, options);
-  }
-  list(options) {
-    return this.getAPIList("/models", ModelsPage, options);
-  }
-  del(model, options) {
-    return this.delete(`/models/${model}`, options);
-  }
-}
-
-class ModelsPage extends Page {
-}
-(function(Models2) {
-  Models2.ModelsPage = ModelsPage;
-})(Models || (Models = {}));
-// node_modules/openai/resources/moderations.mjs
-class Moderations extends APIResource {
-  create(body, options) {
-    return this.post("/moderations", { body, ...options });
-  }
-}
-(function(Moderations2) {
-})(Moderations || (Moderations = {}));
-// node_modules/openai/index.mjs
-var _a;
-
-class OpenAI extends APIClient {
-  constructor({ apiKey = readEnv("OPENAI_API_KEY"), organization = readEnv("OPENAI_ORG_ID") ?? null, ...opts } = {}) {
-    if (apiKey === undefined) {
-      throw new OpenAIError("The OPENAI_API_KEY environment variable is missing or empty; either provide it, or instantiate the OpenAI client with an apiKey option, like new OpenAI({ apiKey: 'My API Key' }).");
-    }
-    const options = {
-      apiKey,
-      organization,
-      ...opts,
-      baseURL: opts.baseURL ?? `https://api.openai.com/v1`
-    };
-    if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
-      throw new OpenAIError("It looks like you're running in a browser-like environment.\n\nThis is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew OpenAI({ apiKey, dangerouslyAllowBrowser: true });\n\nhttps://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety\n");
-    }
-    super({
-      baseURL: options.baseURL,
-      timeout: options.timeout ?? 600000,
-      httpAgent: options.httpAgent,
-      maxRetries: options.maxRetries,
-      fetch: options.fetch
-    });
-    this.completions = new Completions2(this);
-    this.chat = new Chat(this);
-    this.edits = new Edits(this);
-    this.embeddings = new Embeddings(this);
-    this.files = new Files(this);
-    this.images = new Images(this);
-    this.audio = new Audio(this);
-    this.moderations = new Moderations(this);
-    this.models = new Models(this);
-    this.fineTuning = new FineTuning(this);
-    this.fineTunes = new FineTunes(this);
-    this._options = options;
-    this.apiKey = apiKey;
-    this.organization = organization;
-  }
-  defaultQuery() {
-    return this._options.defaultQuery;
-  }
-  defaultHeaders(opts) {
-    return {
-      ...super.defaultHeaders(opts),
-      "OpenAI-Organization": this.organization,
-      ...this._options.defaultHeaders
-    };
-  }
-  authHeaders(opts) {
-    return { Authorization: `Bearer ${this.apiKey}` };
-  }
-}
-_a = OpenAI;
-OpenAI.OpenAI = _a;
-OpenAI.OpenAIError = OpenAIError;
-OpenAI.APIError = APIError;
-OpenAI.APIConnectionError = APIConnectionError;
-OpenAI.APIConnectionTimeoutError = APIConnectionTimeoutError;
-OpenAI.APIUserAbortError = APIUserAbortError;
-OpenAI.NotFoundError = NotFoundError;
-OpenAI.ConflictError = ConflictError;
-OpenAI.RateLimitError = RateLimitError;
-OpenAI.BadRequestError = BadRequestError;
-OpenAI.AuthenticationError = AuthenticationError;
-OpenAI.InternalServerError = InternalServerError;
-OpenAI.PermissionDeniedError = PermissionDeniedError;
-OpenAI.UnprocessableEntityError = UnprocessableEntityError;
-(function(OpenAI2) {
-  OpenAI2.toFile = toFile;
-  OpenAI2.fileFromPath = fileFromPath;
-  OpenAI2.Page = Page;
-  OpenAI2.CursorPage = CursorPage;
-  OpenAI2.Completions = Completions2;
-  OpenAI2.Chat = Chat;
-  OpenAI2.Edits = Edits;
-  OpenAI2.Embeddings = Embeddings;
-  OpenAI2.Files = Files;
-  OpenAI2.FileObjectsPage = FileObjectsPage;
-  OpenAI2.Images = Images;
-  OpenAI2.Audio = Audio;
-  OpenAI2.Moderations = Moderations;
-  OpenAI2.Models = Models;
-  OpenAI2.ModelsPage = ModelsPage;
-  OpenAI2.FineTuning = FineTuning;
-  OpenAI2.FineTunes = FineTunes;
-  OpenAI2.FineTunesPage = FineTunesPage;
-})(OpenAI || (OpenAI = {}));
-var openai_default = OpenAI;
-
-// src/api.ts
-var openai = new openai_default({
-  apiKey: "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"
-});
-var prompt = (command, error5) => `
-  You're a programmer.
-  You just encounter this ${error5} running this ${command}.
-  Can you debug it to the best of your abilities?
-  Be concise in your response. Return a command you think may fix it as a code snippet.
-  If you can not, return "I can not debug this" as your response.
-  If the command you return is a valid command and executable (does not need any additional information from the user) in shell return true in the json response as a boolean.
-  Always return your response as json. In this fomat {"message": "<your response>", snippet: "<code snippet>", "commandExecutable": "<true or false>" }
-  Omit anything but the json from your response.
-`;
-var openAiApi = {
-  debug: async (command, error5) => {
-    let chat2 = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt(command, error5) }]
-    });
-    return { response: chat2.choices[0].message.content };
-  }
-};
-
-// src/index.ts
-var isEmpty = __toESM(require_isEmpty(), 1);
-
-// node_modules/commander/esm.mjs
-var import_ = __toESM(require_commander(), 1);
-var {
-  program,
-  createCommand,
-  createArgument,
-  createOption,
-  CommanderError,
-  InvalidArgumentError,
-  InvalidOptionArgumentError,
-  Command,
-  Argument,
-  Option,
-  Help
-} = import_.default;
 
 // node_modules/marked/lib/marked.esm.js
 var _getDefaults = function() {
@@ -26043,6 +24223,1631 @@ var parseInline = marked.parseInline;
 var parser = _Parser.parse;
 var lexer = _Lexer.lex;
 
+// node_modules/openai/version.mjs
+var VERSION = "4.14.1";
+
+// node_modules/openai/_shims/registry.mjs
+function setShims(shims, options2 = { auto: false }) {
+  if (auto) {
+    throw new Error(`you must \`import 'openai/shims/${shims.kind}'\` before importing anything else from openai`);
+  }
+  if (kind) {
+    throw new Error(`can't \`import 'openai/shims/${shims.kind}'\` after \`import 'openai/shims/${kind}'\``);
+  }
+  auto = options2.auto;
+  kind = shims.kind;
+  fetch2 = shims.fetch;
+  Request2 = shims.Request;
+  Response2 = shims.Response;
+  Headers2 = shims.Headers;
+  FormData2 = shims.FormData;
+  Blob2 = shims.Blob;
+  File2 = shims.File;
+  ReadableStream2 = shims.ReadableStream;
+  getMultipartRequestOptions = shims.getMultipartRequestOptions;
+  getDefaultAgent = shims.getDefaultAgent;
+  fileFromPath = shims.fileFromPath;
+  isFsReadStream = shims.isFsReadStream;
+}
+var auto = false;
+var kind = undefined;
+var fetch2 = undefined;
+var Request2 = undefined;
+var Response2 = undefined;
+var Headers2 = undefined;
+var FormData2 = undefined;
+var Blob2 = undefined;
+var File2 = undefined;
+var ReadableStream2 = undefined;
+var getMultipartRequestOptions = undefined;
+var getDefaultAgent = undefined;
+var fileFromPath = undefined;
+var isFsReadStream = undefined;
+
+// node_modules/openai/_shims/MultipartBody.mjs
+class MultipartBody {
+  constructor(body) {
+    this.body = body;
+  }
+  get [Symbol.toStringTag]() {
+    return "MultipartBody";
+  }
+}
+
+// node_modules/openai/_shims/web-runtime.mjs
+function getRuntime({ manuallyImported } = {}) {
+  const recommendation = manuallyImported ? `You may need to use polyfills` : `Add one of these imports before your first \`import \u2026 from 'openai'\`:
+- \`import 'openai/shims/node'\` (if you're running on Node)
+- \`import 'openai/shims/web'\` (otherwise)
+`;
+  let _fetch, _Request, _Response, _Headers;
+  try {
+    _fetch = fetch;
+    _Request = Request;
+    _Response = Response;
+    _Headers = Headers;
+  } catch (error) {
+    throw new Error(`this environment is missing the following Web Fetch API type: ${error.message}. ${recommendation}`);
+  }
+  return {
+    kind: "web",
+    fetch: _fetch,
+    Request: _Request,
+    Response: _Response,
+    Headers: _Headers,
+    FormData: typeof FormData !== "undefined" ? FormData : class FormData3 {
+      constructor() {
+        throw new Error(`file uploads aren't supported in this environment yet as 'FormData' is undefined. ${recommendation}`);
+      }
+    },
+    Blob: typeof Blob !== "undefined" ? Blob : class Blob3 {
+      constructor() {
+        throw new Error(`file uploads aren't supported in this environment yet as 'Blob' is undefined. ${recommendation}`);
+      }
+    },
+    File: typeof File !== "undefined" ? File : class File3 {
+      constructor() {
+        throw new Error(`file uploads aren't supported in this environment yet as 'File' is undefined. ${recommendation}`);
+      }
+    },
+    ReadableStream: typeof ReadableStream !== "undefined" ? ReadableStream : class ReadableStream3 {
+      constructor() {
+        throw new Error(`streaming isn't supported in this environment yet as 'ReadableStream' is undefined. ${recommendation}`);
+      }
+    },
+    getMultipartRequestOptions: async (form, opts) => ({
+      ...opts,
+      body: new MultipartBody(form)
+    }),
+    getDefaultAgent: (url) => {
+      return;
+    },
+    fileFromPath: () => {
+      throw new Error("The `fileFromPath` function is only supported in Node. See the README for more details: https://www.github.com/openai/openai-node#file-uploads");
+    },
+    isFsReadStream: (value) => false
+  };
+}
+
+// node_modules/openai/_shims/index.mjs
+if (!kind)
+  setShims(getRuntime(), { auto: true });
+
+// node_modules/openai/error.mjs
+class OpenAIError extends Error {
+}
+
+class APIError extends OpenAIError {
+  constructor(status, error, message, headers) {
+    super(`${APIError.makeMessage(status, error, message)}`);
+    this.status = status;
+    this.headers = headers;
+    const data = error;
+    this.error = data;
+    this.code = data?.["code"];
+    this.param = data?.["param"];
+    this.type = data?.["type"];
+  }
+  static makeMessage(status, error, message) {
+    const msg = error?.message ? typeof error.message === "string" ? error.message : JSON.stringify(error.message) : error ? JSON.stringify(error) : message;
+    if (status && msg) {
+      return `${status} ${msg}`;
+    }
+    if (status) {
+      return `${status} status code (no body)`;
+    }
+    if (msg) {
+      return msg;
+    }
+    return "(no status code or body)";
+  }
+  static generate(status, errorResponse, message, headers) {
+    if (!status) {
+      return new APIConnectionError({ cause: castToError(errorResponse) });
+    }
+    const error = errorResponse?.["error"];
+    if (status === 400) {
+      return new BadRequestError(status, error, message, headers);
+    }
+    if (status === 401) {
+      return new AuthenticationError(status, error, message, headers);
+    }
+    if (status === 403) {
+      return new PermissionDeniedError(status, error, message, headers);
+    }
+    if (status === 404) {
+      return new NotFoundError(status, error, message, headers);
+    }
+    if (status === 409) {
+      return new ConflictError(status, error, message, headers);
+    }
+    if (status === 422) {
+      return new UnprocessableEntityError(status, error, message, headers);
+    }
+    if (status === 429) {
+      return new RateLimitError(status, error, message, headers);
+    }
+    if (status >= 500) {
+      return new InternalServerError(status, error, message, headers);
+    }
+    return new APIError(status, error, message, headers);
+  }
+}
+
+class APIUserAbortError extends APIError {
+  constructor({ message } = {}) {
+    super(undefined, undefined, message || "Request was aborted.", undefined);
+    this.status = undefined;
+  }
+}
+
+class APIConnectionError extends APIError {
+  constructor({ message, cause }) {
+    super(undefined, undefined, message || "Connection error.", undefined);
+    this.status = undefined;
+    if (cause)
+      this.cause = cause;
+  }
+}
+
+class APIConnectionTimeoutError extends APIConnectionError {
+  constructor({ message } = {}) {
+    super({ message: message ?? "Request timed out." });
+  }
+}
+
+class BadRequestError extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 400;
+  }
+}
+
+class AuthenticationError extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 401;
+  }
+}
+
+class PermissionDeniedError extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 403;
+  }
+}
+
+class NotFoundError extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 404;
+  }
+}
+
+class ConflictError extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 409;
+  }
+}
+
+class UnprocessableEntityError extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 422;
+  }
+}
+
+class RateLimitError extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 429;
+  }
+}
+
+class InternalServerError extends APIError {
+}
+
+// node_modules/openai/streaming.mjs
+var partition = function(str, delimiter) {
+  const index = str.indexOf(delimiter);
+  if (index !== -1) {
+    return [str.substring(0, index), delimiter, str.substring(index + delimiter.length)];
+  }
+  return [str, "", ""];
+};
+var readableStreamAsyncIterable = function(stream) {
+  if (stream[Symbol.asyncIterator])
+    return stream;
+  const reader = stream.getReader();
+  return {
+    async next() {
+      try {
+        const result = await reader.read();
+        if (result?.done)
+          reader.releaseLock();
+        return result;
+      } catch (e) {
+        reader.releaseLock();
+        throw e;
+      }
+    },
+    async return() {
+      const cancelPromise = reader.cancel();
+      reader.releaseLock();
+      await cancelPromise;
+      return { done: true, value: undefined };
+    },
+    [Symbol.asyncIterator]() {
+      return this;
+    }
+  };
+};
+
+class Stream {
+  constructor(iterator, controller) {
+    this.iterator = iterator;
+    this.controller = controller;
+  }
+  static fromSSEResponse(response, controller) {
+    let consumed = false;
+    const decoder = new SSEDecoder;
+    async function* iterMessages() {
+      if (!response.body) {
+        controller.abort();
+        throw new OpenAIError(`Attempted to iterate over a response with no body`);
+      }
+      const lineDecoder = new LineDecoder;
+      const iter = readableStreamAsyncIterable(response.body);
+      for await (const chunk of iter) {
+        for (const line of lineDecoder.decode(chunk)) {
+          const sse = decoder.decode(line);
+          if (sse)
+            yield sse;
+        }
+      }
+      for (const line of lineDecoder.flush()) {
+        const sse = decoder.decode(line);
+        if (sse)
+          yield sse;
+      }
+    }
+    async function* iterator() {
+      if (consumed) {
+        throw new Error("Cannot iterate over a consumed stream, use `.tee()` to split the stream.");
+      }
+      consumed = true;
+      let done = false;
+      try {
+        for await (const sse of iterMessages()) {
+          if (done)
+            continue;
+          if (sse.data.startsWith("[DONE]")) {
+            done = true;
+            continue;
+          }
+          if (sse.event === null) {
+            let data;
+            try {
+              data = JSON.parse(sse.data);
+            } catch (e) {
+              console.error(`Could not parse message into JSON:`, sse.data);
+              console.error(`From chunk:`, sse.raw);
+              throw e;
+            }
+            if (data && data.error) {
+              throw new APIError(undefined, data.error, undefined, undefined);
+            }
+            yield data;
+          }
+        }
+        done = true;
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError")
+          return;
+        throw e;
+      } finally {
+        if (!done)
+          controller.abort();
+      }
+    }
+    return new Stream(iterator, controller);
+  }
+  static fromReadableStream(readableStream, controller) {
+    let consumed = false;
+    async function* iterLines() {
+      const lineDecoder = new LineDecoder;
+      const iter = readableStreamAsyncIterable(readableStream);
+      for await (const chunk of iter) {
+        for (const line of lineDecoder.decode(chunk)) {
+          yield line;
+        }
+      }
+      for (const line of lineDecoder.flush()) {
+        yield line;
+      }
+    }
+    async function* iterator() {
+      if (consumed) {
+        throw new Error("Cannot iterate over a consumed stream, use `.tee()` to split the stream.");
+      }
+      consumed = true;
+      let done = false;
+      try {
+        for await (const line of iterLines()) {
+          if (done)
+            continue;
+          if (line)
+            yield JSON.parse(line);
+        }
+        done = true;
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError")
+          return;
+        throw e;
+      } finally {
+        if (!done)
+          controller.abort();
+      }
+    }
+    return new Stream(iterator, controller);
+  }
+  [Symbol.asyncIterator]() {
+    return this.iterator();
+  }
+  tee() {
+    const left = [];
+    const right = [];
+    const iterator = this.iterator();
+    const teeIterator = (queue) => {
+      return {
+        next: () => {
+          if (queue.length === 0) {
+            const result = iterator.next();
+            left.push(result);
+            right.push(result);
+          }
+          return queue.shift();
+        }
+      };
+    };
+    return [
+      new Stream(() => teeIterator(left), this.controller),
+      new Stream(() => teeIterator(right), this.controller)
+    ];
+  }
+  toReadableStream() {
+    const self2 = this;
+    let iter;
+    const encoder = new TextEncoder;
+    return new ReadableStream2({
+      async start() {
+        iter = self2[Symbol.asyncIterator]();
+      },
+      async pull(ctrl) {
+        try {
+          const { value, done } = await iter.next();
+          if (done)
+            return ctrl.close();
+          const bytes = encoder.encode(JSON.stringify(value) + "\n");
+          ctrl.enqueue(bytes);
+        } catch (err) {
+          ctrl.error(err);
+        }
+      },
+      async cancel() {
+        await iter.return?.();
+      }
+    });
+  }
+}
+
+class SSEDecoder {
+  constructor() {
+    this.event = null;
+    this.data = [];
+    this.chunks = [];
+  }
+  decode(line) {
+    if (line.endsWith("\r")) {
+      line = line.substring(0, line.length - 1);
+    }
+    if (!line) {
+      if (!this.event && !this.data.length)
+        return null;
+      const sse = {
+        event: this.event,
+        data: this.data.join("\n"),
+        raw: this.chunks
+      };
+      this.event = null;
+      this.data = [];
+      this.chunks = [];
+      return sse;
+    }
+    this.chunks.push(line);
+    if (line.startsWith(":")) {
+      return null;
+    }
+    let [fieldname, _, value] = partition(line, ":");
+    if (value.startsWith(" ")) {
+      value = value.substring(1);
+    }
+    if (fieldname === "event") {
+      this.event = value;
+    } else if (fieldname === "data") {
+      this.data.push(value);
+    }
+    return null;
+  }
+}
+
+class LineDecoder {
+  constructor() {
+    this.buffer = [];
+    this.trailingCR = false;
+  }
+  decode(chunk) {
+    let text = this.decodeText(chunk);
+    if (this.trailingCR) {
+      text = "\r" + text;
+      this.trailingCR = false;
+    }
+    if (text.endsWith("\r")) {
+      this.trailingCR = true;
+      text = text.slice(0, -1);
+    }
+    if (!text) {
+      return [];
+    }
+    const trailingNewline = LineDecoder.NEWLINE_CHARS.has(text[text.length - 1] || "");
+    let lines = text.split(LineDecoder.NEWLINE_REGEXP);
+    if (lines.length === 1 && !trailingNewline) {
+      this.buffer.push(lines[0]);
+      return [];
+    }
+    if (this.buffer.length > 0) {
+      lines = [this.buffer.join("") + lines[0], ...lines.slice(1)];
+      this.buffer = [];
+    }
+    if (!trailingNewline) {
+      this.buffer = [lines.pop() || ""];
+    }
+    return lines;
+  }
+  decodeText(bytes) {
+    if (bytes == null)
+      return "";
+    if (typeof bytes === "string")
+      return bytes;
+    if (typeof Buffer !== "undefined") {
+      if (bytes instanceof Buffer) {
+        return bytes.toString();
+      }
+      if (bytes instanceof Uint8Array) {
+        return Buffer.from(bytes).toString();
+      }
+      throw new OpenAIError(`Unexpected: received non-Uint8Array (${bytes.constructor.name}) stream chunk in an environment with a global "Buffer" defined, which this library assumes to be Node. Please report this error.`);
+    }
+    if (typeof TextDecoder !== "undefined") {
+      if (bytes instanceof Uint8Array || bytes instanceof ArrayBuffer) {
+        this.textDecoder ?? (this.textDecoder = new TextDecoder("utf8"));
+        return this.textDecoder.decode(bytes);
+      }
+      throw new OpenAIError(`Unexpected: received non-Uint8Array/ArrayBuffer (${bytes.constructor.name}) in a web platform. Please report this error.`);
+    }
+    throw new OpenAIError(`Unexpected: neither Buffer nor TextDecoder are available as globals. Please report this error.`);
+  }
+  flush() {
+    if (!this.buffer.length && !this.trailingCR) {
+      return [];
+    }
+    const lines = [this.buffer.join("")];
+    this.buffer = [];
+    this.trailingCR = false;
+    return lines;
+  }
+}
+LineDecoder.NEWLINE_CHARS = new Set(["\n", "\r", "\v", "\f", "\x1C", "\x1D", "\x1E", "\x85", "\u2028", "\u2029"]);
+LineDecoder.NEWLINE_REGEXP = /\r\n|[\n\r\x0b\x0c\x1c\x1d\x1e\x85\u2028\u2029]/g;
+
+// node_modules/openai/uploads.mjs
+async function toFile(value, name, options2 = {}) {
+  value = await value;
+  if (isResponseLike(value)) {
+    const blob = await value.blob();
+    name || (name = new URL(value.url).pathname.split(/[\\/]/).pop() ?? "unknown_file");
+    return new File2([blob], name, options2);
+  }
+  const bits = await getBytes(value);
+  name || (name = getName(value) ?? "unknown_file");
+  if (!options2.type) {
+    const type = bits[0]?.type;
+    if (typeof type === "string") {
+      options2 = { ...options2, type };
+    }
+  }
+  return new File2(bits, name, options2);
+}
+async function getBytes(value) {
+  let parts = [];
+  if (typeof value === "string" || ArrayBuffer.isView(value) || value instanceof ArrayBuffer) {
+    parts.push(value);
+  } else if (isBlobLike(value)) {
+    parts.push(await value.arrayBuffer());
+  } else if (isAsyncIterableIterator(value)) {
+    for await (const chunk of value) {
+      parts.push(chunk);
+    }
+  } else {
+    throw new Error(`Unexpected data type: ${typeof value}; constructor: ${value?.constructor?.name}; props: ${propsForError(value)}`);
+  }
+  return parts;
+}
+var propsForError = function(value) {
+  const props = Object.getOwnPropertyNames(value);
+  return `[${props.map((p) => `"${p}"`).join(", ")}]`;
+};
+var getName = function(value) {
+  return getStringFromMaybeBuffer(value.name) || getStringFromMaybeBuffer(value.filename) || getStringFromMaybeBuffer(value.path)?.split(/[\\/]/).pop();
+};
+var isResponseLike = (value) => value != null && typeof value === "object" && typeof value.url === "string" && typeof value.blob === "function";
+var isFileLike = (value) => value != null && typeof value === "object" && typeof value.name === "string" && typeof value.lastModified === "number" && isBlobLike(value);
+var isBlobLike = (value) => value != null && typeof value === "object" && typeof value.size === "number" && typeof value.type === "string" && typeof value.text === "function" && typeof value.slice === "function" && typeof value.arrayBuffer === "function";
+var isUploadable = (value) => {
+  return isFileLike(value) || isResponseLike(value) || isFsReadStream(value);
+};
+var getStringFromMaybeBuffer = (x) => {
+  if (typeof x === "string")
+    return x;
+  if (typeof Buffer !== "undefined" && x instanceof Buffer)
+    return String(x);
+  return;
+};
+var isAsyncIterableIterator = (value) => value != null && typeof value === "object" && typeof value[Symbol.asyncIterator] === "function";
+var isMultipartBody = (body) => body && typeof body === "object" && body.body && body[Symbol.toStringTag] === "MultipartBody";
+var multipartFormRequestOptions = async (opts) => {
+  const form = await createForm(opts.body);
+  return getMultipartRequestOptions(form, opts);
+};
+var createForm = async (body) => {
+  const form = new FormData2;
+  await Promise.all(Object.entries(body || {}).map(([key, value]) => addFormValue(form, key, value)));
+  return form;
+};
+var addFormValue = async (form, key, value) => {
+  if (value === undefined)
+    return;
+  if (value == null) {
+    throw new TypeError(`Received null for "${key}"; to pass null in FormData, you must use the string 'null'`);
+  }
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    form.append(key, String(value));
+  } else if (isUploadable(value)) {
+    const file = await toFile(value);
+    form.append(key, file);
+  } else if (Array.isArray(value)) {
+    await Promise.all(value.map((entry) => addFormValue(form, key + "[]", entry)));
+  } else if (typeof value === "object") {
+    await Promise.all(Object.entries(value).map(([name, prop]) => addFormValue(form, `${key}[${name}]`, prop)));
+  } else {
+    throw new TypeError(`Invalid value given to form, expected a string, number, boolean, object, Array, File or Blob but got ${value} instead`);
+  }
+};
+
+// node_modules/openai/core.mjs
+async function defaultParseResponse(props) {
+  const { response } = props;
+  if (props.options.stream) {
+    debug("response", response.status, response.url, response.headers, response.body);
+    return Stream.fromSSEResponse(response, props.controller);
+  }
+  if (response.status === 204) {
+    return null;
+  }
+  const contentType = response.headers.get("content-type");
+  if (contentType?.includes("application/json")) {
+    const json = await response.json();
+    debug("response", response.status, response.url, response.headers, json);
+    return json;
+  }
+  const text = await response.text();
+  debug("response", response.status, response.url, response.headers, text);
+  return text;
+}
+var getBrowserInfo = function() {
+  if (typeof navigator === "undefined" || !navigator) {
+    return null;
+  }
+  const browserPatterns = [
+    { key: "edge", pattern: /Edge(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "ie", pattern: /MSIE(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "ie", pattern: /Trident(?:.*rv\:(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "chrome", pattern: /Chrome(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "firefox", pattern: /Firefox(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "safari", pattern: /(?:Version\W+(\d+)\.(\d+)(?:\.(\d+))?)?(?:\W+Mobile\S*)?\W+Safari/ }
+  ];
+  for (const { key, pattern } of browserPatterns) {
+    const match = pattern.exec(navigator.userAgent);
+    if (match) {
+      const major = match[1] || 0;
+      const minor = match[2] || 0;
+      const patch = match[3] || 0;
+      return { browser: key, version: `${major}.${minor}.${patch}` };
+    }
+  }
+  return null;
+};
+function isEmptyObj(obj) {
+  if (!obj)
+    return true;
+  for (const _k in obj)
+    return false;
+  return true;
+}
+function hasOwn(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+function debug(action, ...args) {
+  if (typeof process !== "undefined" && process.env["DEBUG"] === "true") {
+    console.log(`OpenAI:DEBUG:${action}`, ...args);
+  }
+}
+var __classPrivateFieldSet = function(receiver, state, value, kind2, f) {
+  if (kind2 === "m")
+    throw new TypeError("Private method is not writable");
+  if (kind2 === "a" && !f)
+    throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return kind2 === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value), value;
+};
+var __classPrivateFieldGet = function(receiver, state, kind2, f) {
+  if (kind2 === "a" && !f)
+    throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind2 === "m" ? f : kind2 === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var _AbstractPage_client;
+
+class APIPromise extends Promise {
+  constructor(responsePromise, parseResponse = defaultParseResponse) {
+    super((resolve) => {
+      resolve(null);
+    });
+    this.responsePromise = responsePromise;
+    this.parseResponse = parseResponse;
+  }
+  _thenUnwrap(transform) {
+    return new APIPromise(this.responsePromise, async (props) => transform(await this.parseResponse(props)));
+  }
+  asResponse() {
+    return this.responsePromise.then((p) => p.response);
+  }
+  async withResponse() {
+    const [data, response] = await Promise.all([this.parse(), this.asResponse()]);
+    return { data, response };
+  }
+  parse() {
+    if (!this.parsedPromise) {
+      this.parsedPromise = this.responsePromise.then(this.parseResponse);
+    }
+    return this.parsedPromise;
+  }
+  then(onfulfilled, onrejected) {
+    return this.parse().then(onfulfilled, onrejected);
+  }
+  catch(onrejected) {
+    return this.parse().catch(onrejected);
+  }
+  finally(onfinally) {
+    return this.parse().finally(onfinally);
+  }
+}
+
+class APIClient {
+  constructor({
+    baseURL,
+    maxRetries = 2,
+    timeout = 600000,
+    httpAgent,
+    fetch: overridenFetch
+  }) {
+    this.baseURL = baseURL;
+    this.maxRetries = validatePositiveInteger("maxRetries", maxRetries);
+    this.timeout = validatePositiveInteger("timeout", timeout);
+    this.httpAgent = httpAgent;
+    this.fetch = overridenFetch ?? fetch2;
+  }
+  authHeaders(opts) {
+    return {};
+  }
+  defaultHeaders(opts) {
+    return {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "User-Agent": this.getUserAgent(),
+      ...getPlatformHeaders(),
+      ...this.authHeaders(opts)
+    };
+  }
+  validateHeaders(headers, customHeaders) {
+  }
+  defaultIdempotencyKey() {
+    return `stainless-node-retry-${uuid4()}`;
+  }
+  get(path, opts) {
+    return this.methodRequest("get", path, opts);
+  }
+  post(path, opts) {
+    return this.methodRequest("post", path, opts);
+  }
+  patch(path, opts) {
+    return this.methodRequest("patch", path, opts);
+  }
+  put(path, opts) {
+    return this.methodRequest("put", path, opts);
+  }
+  delete(path, opts) {
+    return this.methodRequest("delete", path, opts);
+  }
+  methodRequest(method, path, opts) {
+    return this.request(Promise.resolve(opts).then((opts2) => ({ method, path, ...opts2 })));
+  }
+  getAPIList(path, Page, opts) {
+    return this.requestAPIList(Page, { method: "get", path, ...opts });
+  }
+  calculateContentLength(body) {
+    if (typeof body === "string") {
+      if (typeof Buffer !== "undefined") {
+        return Buffer.byteLength(body, "utf8").toString();
+      }
+      if (typeof TextEncoder !== "undefined") {
+        const encoder = new TextEncoder;
+        const encoded = encoder.encode(body);
+        return encoded.length.toString();
+      }
+    }
+    return null;
+  }
+  buildRequest(options2) {
+    const { method, path, query, headers = {} } = options2;
+    const body = isMultipartBody(options2.body) ? options2.body.body : options2.body ? JSON.stringify(options2.body, null, 2) : null;
+    const contentLength = this.calculateContentLength(body);
+    const url = this.buildURL(path, query);
+    if ("timeout" in options2)
+      validatePositiveInteger("timeout", options2.timeout);
+    const timeout = options2.timeout ?? this.timeout;
+    const httpAgent = options2.httpAgent ?? this.httpAgent ?? getDefaultAgent(url);
+    const minAgentTimeout = timeout + 1000;
+    if (typeof httpAgent?.options?.timeout === "number" && minAgentTimeout > (httpAgent.options.timeout ?? 0)) {
+      httpAgent.options.timeout = minAgentTimeout;
+    }
+    if (this.idempotencyHeader && method !== "get") {
+      if (!options2.idempotencyKey)
+        options2.idempotencyKey = this.defaultIdempotencyKey();
+      headers[this.idempotencyHeader] = options2.idempotencyKey;
+    }
+    const reqHeaders = {
+      ...contentLength && { "Content-Length": contentLength },
+      ...this.defaultHeaders(options2),
+      ...headers
+    };
+    if (isMultipartBody(options2.body) && kind !== "node") {
+      delete reqHeaders["Content-Type"];
+    }
+    Object.keys(reqHeaders).forEach((key) => reqHeaders[key] === null && delete reqHeaders[key]);
+    const req = {
+      method,
+      ...body && { body },
+      headers: reqHeaders,
+      ...httpAgent && { agent: httpAgent },
+      signal: options2.signal ?? null
+    };
+    this.validateHeaders(reqHeaders, headers);
+    return { req, url, timeout };
+  }
+  async prepareRequest(request, { url, options: options2 }) {
+  }
+  parseHeaders(headers) {
+    return !headers ? {} : (Symbol.iterator in headers) ? Object.fromEntries(Array.from(headers).map((header) => [...header])) : { ...headers };
+  }
+  makeStatusError(status, error4, message, headers) {
+    return APIError.generate(status, error4, message, headers);
+  }
+  request(options2, remainingRetries = null) {
+    return new APIPromise(this.makeRequest(options2, remainingRetries));
+  }
+  async makeRequest(optionsInput, retriesRemaining) {
+    const options2 = await optionsInput;
+    if (retriesRemaining == null) {
+      retriesRemaining = options2.maxRetries ?? this.maxRetries;
+    }
+    const { req, url, timeout } = this.buildRequest(options2);
+    await this.prepareRequest(req, { url, options: options2 });
+    debug("request", url, options2, req.headers);
+    if (options2.signal?.aborted) {
+      throw new APIUserAbortError;
+    }
+    const controller = new AbortController;
+    const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
+    if (response instanceof Error) {
+      if (options2.signal?.aborted) {
+        throw new APIUserAbortError;
+      }
+      if (retriesRemaining) {
+        return this.retryRequest(options2, retriesRemaining);
+      }
+      if (response.name === "AbortError") {
+        throw new APIConnectionTimeoutError;
+      }
+      throw new APIConnectionError({ cause: response });
+    }
+    const responseHeaders = createResponseHeaders(response.headers);
+    if (!response.ok) {
+      if (retriesRemaining && this.shouldRetry(response)) {
+        return this.retryRequest(options2, retriesRemaining, responseHeaders);
+      }
+      const errText = await response.text().catch((e) => castToError(e).message);
+      const errJSON = safeJSON(errText);
+      const errMessage = errJSON ? undefined : errText;
+      debug("response", response.status, url, responseHeaders, errMessage);
+      const err = this.makeStatusError(response.status, errJSON, errMessage, responseHeaders);
+      throw err;
+    }
+    return { response, options: options2, controller };
+  }
+  requestAPIList(Page, options2) {
+    const request = this.makeRequest(options2, null);
+    return new PagePromise(this, request, Page);
+  }
+  buildURL(path, query) {
+    const url = isAbsoluteURL(path) ? new URL(path) : new URL(this.baseURL + (this.baseURL.endsWith("/") && path.startsWith("/") ? path.slice(1) : path));
+    const defaultQuery = this.defaultQuery();
+    if (!isEmptyObj(defaultQuery)) {
+      query = { ...defaultQuery, ...query };
+    }
+    if (query) {
+      url.search = this.stringifyQuery(query);
+    }
+    return url.toString();
+  }
+  stringifyQuery(query) {
+    return Object.entries(query).filter(([_, value]) => typeof value !== "undefined").map(([key, value]) => {
+      if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+        return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+      }
+      if (value === null) {
+        return `${encodeURIComponent(key)}=`;
+      }
+      throw new OpenAIError(`Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`);
+    }).join("&");
+  }
+  async fetchWithTimeout(url, init, ms, controller) {
+    const { signal, ...options2 } = init || {};
+    if (signal)
+      signal.addEventListener("abort", () => controller.abort());
+    const timeout = setTimeout(() => controller.abort(), ms);
+    return this.getRequestClient().fetch.call(undefined, url, { signal: controller.signal, ...options2 }).finally(() => {
+      clearTimeout(timeout);
+    });
+  }
+  getRequestClient() {
+    return { fetch: this.fetch };
+  }
+  shouldRetry(response) {
+    const shouldRetryHeader = response.headers.get("x-should-retry");
+    if (shouldRetryHeader === "true")
+      return true;
+    if (shouldRetryHeader === "false")
+      return false;
+    if (response.status === 408)
+      return true;
+    if (response.status === 409)
+      return true;
+    if (response.status === 429)
+      return true;
+    if (response.status >= 500)
+      return true;
+    return false;
+  }
+  async retryRequest(options2, retriesRemaining, responseHeaders) {
+    let timeoutMillis;
+    const retryAfterHeader = responseHeaders?.["retry-after"];
+    if (retryAfterHeader) {
+      const timeoutSeconds = parseInt(retryAfterHeader);
+      if (!Number.isNaN(timeoutSeconds)) {
+        timeoutMillis = timeoutSeconds * 1000;
+      } else {
+        timeoutMillis = Date.parse(retryAfterHeader) - Date.now();
+      }
+    }
+    if (!timeoutMillis || !Number.isInteger(timeoutMillis) || timeoutMillis <= 0 || timeoutMillis > 60 * 1000) {
+      const maxRetries = options2.maxRetries ?? this.maxRetries;
+      timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
+    }
+    await sleep(timeoutMillis);
+    return this.makeRequest(options2, retriesRemaining - 1);
+  }
+  calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries) {
+    const initialRetryDelay = 0.5;
+    const maxRetryDelay = 8;
+    const numRetries = maxRetries - retriesRemaining;
+    const sleepSeconds = Math.min(initialRetryDelay * Math.pow(2, numRetries), maxRetryDelay);
+    const jitter = 1 - Math.random() * 0.25;
+    return sleepSeconds * jitter * 1000;
+  }
+  getUserAgent() {
+    return `${this.constructor.name}/JS ${VERSION}`;
+  }
+}
+class AbstractPage {
+  constructor(client, response, body, options2) {
+    _AbstractPage_client.set(this, undefined);
+    __classPrivateFieldSet(this, _AbstractPage_client, client, "f");
+    this.options = options2;
+    this.response = response;
+    this.body = body;
+  }
+  hasNextPage() {
+    const items = this.getPaginatedItems();
+    if (!items.length)
+      return false;
+    return this.nextPageInfo() != null;
+  }
+  async getNextPage() {
+    const nextInfo = this.nextPageInfo();
+    if (!nextInfo) {
+      throw new OpenAIError("No next page expected; please check `.hasNextPage()` before calling `.getNextPage()`.");
+    }
+    const nextOptions = { ...this.options };
+    if ("params" in nextInfo) {
+      nextOptions.query = { ...nextOptions.query, ...nextInfo.params };
+    } else if ("url" in nextInfo) {
+      const params = [...Object.entries(nextOptions.query || {}), ...nextInfo.url.searchParams.entries()];
+      for (const [key, value] of params) {
+        nextInfo.url.searchParams.set(key, value);
+      }
+      nextOptions.query = undefined;
+      nextOptions.path = nextInfo.url.toString();
+    }
+    return await __classPrivateFieldGet(this, _AbstractPage_client, "f").requestAPIList(this.constructor, nextOptions);
+  }
+  async* iterPages() {
+    let page = this;
+    yield page;
+    while (page.hasNextPage()) {
+      page = await page.getNextPage();
+      yield page;
+    }
+  }
+  async* [(_AbstractPage_client = new WeakMap, Symbol.asyncIterator)]() {
+    for await (const page of this.iterPages()) {
+      for (const item of page.getPaginatedItems()) {
+        yield item;
+      }
+    }
+  }
+}
+
+class PagePromise extends APIPromise {
+  constructor(client, request, Page) {
+    super(request, async (props) => new Page(client, props.response, await defaultParseResponse(props), props.options));
+  }
+  async* [Symbol.asyncIterator]() {
+    const page = await this;
+    for await (const item of page) {
+      yield item;
+    }
+  }
+}
+var createResponseHeaders = (headers) => {
+  return new Proxy(Object.fromEntries(headers.entries()), {
+    get(target, name) {
+      const key = name.toString();
+      return target[key.toLowerCase()] || target[key];
+    }
+  });
+};
+var requestOptionsKeys = {
+  method: true,
+  path: true,
+  query: true,
+  body: true,
+  headers: true,
+  maxRetries: true,
+  stream: true,
+  timeout: true,
+  httpAgent: true,
+  signal: true,
+  idempotencyKey: true
+};
+var isRequestOptions = (obj) => {
+  return typeof obj === "object" && obj !== null && !isEmptyObj(obj) && Object.keys(obj).every((k) => hasOwn(requestOptionsKeys, k));
+};
+var getPlatformProperties = () => {
+  if (typeof Deno !== "undefined" && Deno.build != null) {
+    return {
+      "X-Stainless-Lang": "js",
+      "X-Stainless-Package-Version": VERSION,
+      "X-Stainless-OS": normalizePlatform(Deno.build.os),
+      "X-Stainless-Arch": normalizeArch(Deno.build.arch),
+      "X-Stainless-Runtime": "deno",
+      "X-Stainless-Runtime-Version": Deno.version
+    };
+  }
+  if (typeof EdgeRuntime !== "undefined") {
+    return {
+      "X-Stainless-Lang": "js",
+      "X-Stainless-Package-Version": VERSION,
+      "X-Stainless-OS": "Unknown",
+      "X-Stainless-Arch": `other:${EdgeRuntime}`,
+      "X-Stainless-Runtime": "edge",
+      "X-Stainless-Runtime-Version": process.version
+    };
+  }
+  if (Object.prototype.toString.call(typeof process !== "undefined" ? process : 0) === "[object process]") {
+    return {
+      "X-Stainless-Lang": "js",
+      "X-Stainless-Package-Version": VERSION,
+      "X-Stainless-OS": normalizePlatform(process.platform),
+      "X-Stainless-Arch": normalizeArch(process.arch),
+      "X-Stainless-Runtime": "node",
+      "X-Stainless-Runtime-Version": process.version
+    };
+  }
+  const browserInfo = getBrowserInfo();
+  if (browserInfo) {
+    return {
+      "X-Stainless-Lang": "js",
+      "X-Stainless-Package-Version": VERSION,
+      "X-Stainless-OS": "Unknown",
+      "X-Stainless-Arch": "unknown",
+      "X-Stainless-Runtime": `browser:${browserInfo.browser}`,
+      "X-Stainless-Runtime-Version": browserInfo.version
+    };
+  }
+  return {
+    "X-Stainless-Lang": "js",
+    "X-Stainless-Package-Version": VERSION,
+    "X-Stainless-OS": "Unknown",
+    "X-Stainless-Arch": "unknown",
+    "X-Stainless-Runtime": "unknown",
+    "X-Stainless-Runtime-Version": "unknown"
+  };
+};
+var normalizeArch = (arch) => {
+  if (arch === "x32")
+    return "x32";
+  if (arch === "x86_64" || arch === "x64")
+    return "x64";
+  if (arch === "arm")
+    return "arm";
+  if (arch === "aarch64" || arch === "arm64")
+    return "arm64";
+  if (arch)
+    return `other:${arch}`;
+  return "unknown";
+};
+var normalizePlatform = (platform) => {
+  platform = platform.toLowerCase();
+  if (platform.includes("ios"))
+    return "iOS";
+  if (platform === "android")
+    return "Android";
+  if (platform === "darwin")
+    return "MacOS";
+  if (platform === "win32")
+    return "Windows";
+  if (platform === "freebsd")
+    return "FreeBSD";
+  if (platform === "openbsd")
+    return "OpenBSD";
+  if (platform === "linux")
+    return "Linux";
+  if (platform)
+    return `Other:${platform}`;
+  return "Unknown";
+};
+var _platformHeaders;
+var getPlatformHeaders = () => {
+  return _platformHeaders ?? (_platformHeaders = getPlatformProperties());
+};
+var safeJSON = (text) => {
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    return;
+  }
+};
+var startsWithSchemeRegexp = new RegExp("^(?:[a-z]+:)?//", "i");
+var isAbsoluteURL = (url) => {
+  return startsWithSchemeRegexp.test(url);
+};
+var sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+var validatePositiveInteger = (name, n) => {
+  if (typeof n !== "number" || !Number.isInteger(n)) {
+    throw new OpenAIError(`${name} must be an integer`);
+  }
+  if (n < 0) {
+    throw new OpenAIError(`${name} must be a positive integer`);
+  }
+  return n;
+};
+var castToError = (err) => {
+  if (err instanceof Error)
+    return err;
+  return new Error(err);
+};
+var readEnv = (env) => {
+  if (typeof process !== "undefined") {
+    return process.env?.[env] ?? undefined;
+  }
+  if (typeof Deno !== "undefined") {
+    return Deno.env?.get?.(env);
+  }
+  return;
+};
+var uuid4 = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    const v = c === "x" ? r : r & 3 | 8;
+    return v.toString(16);
+  });
+};
+var isRunningInBrowser = () => {
+  return typeof window !== "undefined" && typeof window.document !== "undefined" && typeof navigator !== "undefined";
+};
+
+// node_modules/openai/pagination.mjs
+class Page extends AbstractPage {
+  constructor(client, response, body, options2) {
+    super(client, response, body, options2);
+    this.data = body.data;
+    this.object = body.object;
+  }
+  getPaginatedItems() {
+    return this.data;
+  }
+  nextPageParams() {
+    return null;
+  }
+  nextPageInfo() {
+    return null;
+  }
+}
+
+class CursorPage extends AbstractPage {
+  constructor(client, response, body, options2) {
+    super(client, response, body, options2);
+    this.data = body.data;
+  }
+  getPaginatedItems() {
+    return this.data;
+  }
+  nextPageParams() {
+    const info = this.nextPageInfo();
+    if (!info)
+      return null;
+    if ("params" in info)
+      return info.params;
+    const params = Object.fromEntries(info.url.searchParams);
+    if (!Object.keys(params).length)
+      return null;
+    return params;
+  }
+  nextPageInfo() {
+    if (!this.data?.length) {
+      return null;
+    }
+    const next = this.data[this.data.length - 1]?.id;
+    if (!next)
+      return null;
+    return { params: { after: next } };
+  }
+}
+
+// node_modules/openai/resource.mjs
+class APIResource {
+  constructor(client) {
+    this.client = client;
+    this.get = client.get.bind(client);
+    this.post = client.post.bind(client);
+    this.patch = client.patch.bind(client);
+    this.put = client.put.bind(client);
+    this.delete = client.delete.bind(client);
+    this.getAPIList = client.getAPIList.bind(client);
+  }
+}
+
+// node_modules/openai/resources/chat/completions.mjs
+class Completions extends APIResource {
+  create(body, options2) {
+    return this.post("/chat/completions", { body, ...options2, stream: body.stream ?? false });
+  }
+}
+(function(Completions2) {
+})(Completions || (Completions = {}));
+
+// node_modules/openai/resources/chat/chat.mjs
+class Chat extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.completions = new Completions(this.client);
+  }
+}
+(function(Chat2) {
+  Chat2.Completions = Completions;
+})(Chat || (Chat = {}));
+// node_modules/openai/resources/audio/transcriptions.mjs
+class Transcriptions extends APIResource {
+  create(body, options2) {
+    return this.post("/audio/transcriptions", multipartFormRequestOptions({ body, ...options2 }));
+  }
+}
+(function(Transcriptions2) {
+})(Transcriptions || (Transcriptions = {}));
+
+// node_modules/openai/resources/audio/translations.mjs
+class Translations extends APIResource {
+  create(body, options2) {
+    return this.post("/audio/translations", multipartFormRequestOptions({ body, ...options2 }));
+  }
+}
+(function(Translations2) {
+})(Translations || (Translations = {}));
+
+// node_modules/openai/resources/audio/audio.mjs
+class Audio extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.transcriptions = new Transcriptions(this.client);
+    this.translations = new Translations(this.client);
+  }
+}
+(function(Audio2) {
+  Audio2.Transcriptions = Transcriptions;
+  Audio2.Translations = Translations;
+})(Audio || (Audio = {}));
+// node_modules/openai/resources/completions.mjs
+class Completions2 extends APIResource {
+  create(body, options2) {
+    return this.post("/completions", { body, ...options2, stream: body.stream ?? false });
+  }
+}
+(function(Completions3) {
+})(Completions2 || (Completions2 = {}));
+// node_modules/openai/resources/embeddings.mjs
+class Embeddings extends APIResource {
+  create(body, options2) {
+    return this.post("/embeddings", { body, ...options2 });
+  }
+}
+(function(Embeddings2) {
+})(Embeddings || (Embeddings = {}));
+// node_modules/openai/resources/edits.mjs
+class Edits extends APIResource {
+  create(body, options2) {
+    return this.post("/edits", { body, ...options2 });
+  }
+}
+(function(Edits2) {
+})(Edits || (Edits = {}));
+// node_modules/openai/resources/files.mjs
+class Files extends APIResource {
+  create(body, options2) {
+    return this.post("/files", multipartFormRequestOptions({ body, ...options2 }));
+  }
+  retrieve(fileId, options2) {
+    return this.get(`/files/${fileId}`, options2);
+  }
+  list(options2) {
+    return this.getAPIList("/files", FileObjectsPage, options2);
+  }
+  del(fileId, options2) {
+    return this.delete(`/files/${fileId}`, options2);
+  }
+  retrieveContent(fileId, options2) {
+    return this.get(`/files/${fileId}/content`, {
+      ...options2,
+      headers: { Accept: "application/json", ...options2?.headers }
+    });
+  }
+  async waitForProcessing(id, { pollInterval = 5000, maxWait = 30 * 60 * 1000 } = {}) {
+    const TERMINAL_STATES = new Set(["processed", "error", "deleted"]);
+    const start = Date.now();
+    let file = await this.retrieve(id);
+    while (!file.status || !TERMINAL_STATES.has(file.status)) {
+      await sleep(pollInterval);
+      file = await this.retrieve(id);
+      if (Date.now() - start > maxWait) {
+        throw new APIConnectionTimeoutError({
+          message: `Giving up on waiting for file ${id} to finish processing after ${maxWait} milliseconds.`
+        });
+      }
+    }
+    return file;
+  }
+}
+
+class FileObjectsPage extends Page {
+}
+(function(Files2) {
+  Files2.FileObjectsPage = FileObjectsPage;
+})(Files || (Files = {}));
+// node_modules/openai/resources/fine-tunes.mjs
+class FineTunes extends APIResource {
+  create(body, options2) {
+    return this.post("/fine-tunes", { body, ...options2 });
+  }
+  retrieve(fineTuneId, options2) {
+    return this.get(`/fine-tunes/${fineTuneId}`, options2);
+  }
+  list(options2) {
+    return this.getAPIList("/fine-tunes", FineTunesPage, options2);
+  }
+  cancel(fineTuneId, options2) {
+    return this.post(`/fine-tunes/${fineTuneId}/cancel`, options2);
+  }
+  listEvents(fineTuneId, query, options2) {
+    return this.get(`/fine-tunes/${fineTuneId}/events`, {
+      query,
+      timeout: 86400000,
+      ...options2,
+      stream: query?.stream ?? false
+    });
+  }
+}
+
+class FineTunesPage extends Page {
+}
+(function(FineTunes2) {
+  FineTunes2.FineTunesPage = FineTunesPage;
+})(FineTunes || (FineTunes = {}));
+// node_modules/openai/resources/fine-tuning/jobs.mjs
+class Jobs extends APIResource {
+  create(body, options2) {
+    return this.post("/fine_tuning/jobs", { body, ...options2 });
+  }
+  retrieve(fineTuningJobId, options2) {
+    return this.get(`/fine_tuning/jobs/${fineTuningJobId}`, options2);
+  }
+  list(query = {}, options2) {
+    if (isRequestOptions(query)) {
+      return this.list({}, query);
+    }
+    return this.getAPIList("/fine_tuning/jobs", FineTuningJobsPage, { query, ...options2 });
+  }
+  cancel(fineTuningJobId, options2) {
+    return this.post(`/fine_tuning/jobs/${fineTuningJobId}/cancel`, options2);
+  }
+  listEvents(fineTuningJobId, query = {}, options2) {
+    if (isRequestOptions(query)) {
+      return this.listEvents(fineTuningJobId, {}, query);
+    }
+    return this.getAPIList(`/fine_tuning/jobs/${fineTuningJobId}/events`, FineTuningJobEventsPage, {
+      query,
+      ...options2
+    });
+  }
+}
+
+class FineTuningJobsPage extends CursorPage {
+}
+
+class FineTuningJobEventsPage extends CursorPage {
+}
+(function(Jobs2) {
+  Jobs2.FineTuningJobsPage = FineTuningJobsPage;
+  Jobs2.FineTuningJobEventsPage = FineTuningJobEventsPage;
+})(Jobs || (Jobs = {}));
+
+// node_modules/openai/resources/fine-tuning/fine-tuning.mjs
+class FineTuning extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.jobs = new Jobs(this.client);
+  }
+}
+(function(FineTuning2) {
+  FineTuning2.Jobs = Jobs;
+  FineTuning2.FineTuningJobsPage = FineTuningJobsPage;
+  FineTuning2.FineTuningJobEventsPage = FineTuningJobEventsPage;
+})(FineTuning || (FineTuning = {}));
+// node_modules/openai/resources/images.mjs
+class Images extends APIResource {
+  createVariation(body, options2) {
+    return this.post("/images/variations", multipartFormRequestOptions({ body, ...options2 }));
+  }
+  edit(body, options2) {
+    return this.post("/images/edits", multipartFormRequestOptions({ body, ...options2 }));
+  }
+  generate(body, options2) {
+    return this.post("/images/generations", { body, ...options2 });
+  }
+}
+(function(Images2) {
+})(Images || (Images = {}));
+// node_modules/openai/resources/models.mjs
+class Models extends APIResource {
+  retrieve(model, options2) {
+    return this.get(`/models/${model}`, options2);
+  }
+  list(options2) {
+    return this.getAPIList("/models", ModelsPage, options2);
+  }
+  del(model, options2) {
+    return this.delete(`/models/${model}`, options2);
+  }
+}
+
+class ModelsPage extends Page {
+}
+(function(Models2) {
+  Models2.ModelsPage = ModelsPage;
+})(Models || (Models = {}));
+// node_modules/openai/resources/moderations.mjs
+class Moderations extends APIResource {
+  create(body, options2) {
+    return this.post("/moderations", { body, ...options2 });
+  }
+}
+(function(Moderations2) {
+})(Moderations || (Moderations = {}));
+// node_modules/openai/index.mjs
+var _a;
+
+class OpenAI extends APIClient {
+  constructor({ apiKey = readEnv("OPENAI_API_KEY"), organization = readEnv("OPENAI_ORG_ID") ?? null, ...opts } = {}) {
+    if (apiKey === undefined) {
+      throw new OpenAIError("The OPENAI_API_KEY environment variable is missing or empty; either provide it, or instantiate the OpenAI client with an apiKey option, like new OpenAI({ apiKey: 'My API Key' }).");
+    }
+    const options2 = {
+      apiKey,
+      organization,
+      ...opts,
+      baseURL: opts.baseURL ?? `https://api.openai.com/v1`
+    };
+    if (!options2.dangerouslyAllowBrowser && isRunningInBrowser()) {
+      throw new OpenAIError("It looks like you're running in a browser-like environment.\n\nThis is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew OpenAI({ apiKey, dangerouslyAllowBrowser: true });\n\nhttps://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety\n");
+    }
+    super({
+      baseURL: options2.baseURL,
+      timeout: options2.timeout ?? 600000,
+      httpAgent: options2.httpAgent,
+      maxRetries: options2.maxRetries,
+      fetch: options2.fetch
+    });
+    this.completions = new Completions2(this);
+    this.chat = new Chat(this);
+    this.edits = new Edits(this);
+    this.embeddings = new Embeddings(this);
+    this.files = new Files(this);
+    this.images = new Images(this);
+    this.audio = new Audio(this);
+    this.moderations = new Moderations(this);
+    this.models = new Models(this);
+    this.fineTuning = new FineTuning(this);
+    this.fineTunes = new FineTunes(this);
+    this._options = options2;
+    this.apiKey = apiKey;
+    this.organization = organization;
+  }
+  defaultQuery() {
+    return this._options.defaultQuery;
+  }
+  defaultHeaders(opts) {
+    return {
+      ...super.defaultHeaders(opts),
+      "OpenAI-Organization": this.organization,
+      ...this._options.defaultHeaders
+    };
+  }
+  authHeaders(opts) {
+    return { Authorization: `Bearer ${this.apiKey}` };
+  }
+}
+_a = OpenAI;
+OpenAI.OpenAI = _a;
+OpenAI.OpenAIError = OpenAIError;
+OpenAI.APIError = APIError;
+OpenAI.APIConnectionError = APIConnectionError;
+OpenAI.APIConnectionTimeoutError = APIConnectionTimeoutError;
+OpenAI.APIUserAbortError = APIUserAbortError;
+OpenAI.NotFoundError = NotFoundError;
+OpenAI.ConflictError = ConflictError;
+OpenAI.RateLimitError = RateLimitError;
+OpenAI.BadRequestError = BadRequestError;
+OpenAI.AuthenticationError = AuthenticationError;
+OpenAI.InternalServerError = InternalServerError;
+OpenAI.PermissionDeniedError = PermissionDeniedError;
+OpenAI.UnprocessableEntityError = UnprocessableEntityError;
+(function(OpenAI2) {
+  OpenAI2.toFile = toFile;
+  OpenAI2.fileFromPath = fileFromPath;
+  OpenAI2.Page = Page;
+  OpenAI2.CursorPage = CursorPage;
+  OpenAI2.Completions = Completions2;
+  OpenAI2.Chat = Chat;
+  OpenAI2.Edits = Edits;
+  OpenAI2.Embeddings = Embeddings;
+  OpenAI2.Files = Files;
+  OpenAI2.FileObjectsPage = FileObjectsPage;
+  OpenAI2.Images = Images;
+  OpenAI2.Audio = Audio;
+  OpenAI2.Moderations = Moderations;
+  OpenAI2.Models = Models;
+  OpenAI2.ModelsPage = ModelsPage;
+  OpenAI2.FineTuning = FineTuning;
+  OpenAI2.FineTunes = FineTunes;
+  OpenAI2.FineTunesPage = FineTunesPage;
+})(OpenAI || (OpenAI = {}));
+var openai_default = OpenAI;
+
+// src/api.ts
+var openai = new openai_default({
+  apiKey: process.env.OPEN_AI_API_TOKEN
+});
+var prompt = (command, error5) => `
+  You're a programmer.
+  You just encountered this ${error5} running this ${command}.
+  Can you debug it to the best of your abilities?
+  Be concise in your response. Return a command you think may fix it as a code snippet.
+  If you can not, return "I can not debug this" as your response.
+  If the command you return is a valid command and executable (does not need any additional information from the user) in shell return true in the json response as a boolean.
+  Always return your response as json. In this fomat {"message": "<your response>", snippet: "<code snippet>", "commandExecutable": "<true or false>" }
+  Omit anything but the json from your response.
+`;
+var openAiApi = {
+  debug: async (command, error5) => {
+    let chat2 = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [{ role: "user", content: prompt(command, error5) }]
+    });
+    return { response: chat2.choices[0].message.content };
+  }
+};
+
+// node_modules/commander/esm.mjs
+var import_ = __toESM(require_commander(), 1);
+var {
+  program,
+  createCommand,
+  createArgument,
+  createOption,
+  CommanderError,
+  InvalidArgumentError,
+  InvalidOptionArgumentError,
+  Command,
+  Argument,
+  Option,
+  Help
+} = import_.default;
+
+// src/index.ts
+var isEmpty = __toESM(require_isEmpty(), 1);
+
 // node_modules/chalk/source/vendor/ansi-styles/index.js
 var assembleStyles = function() {
   const codes = new Map;
@@ -26220,131 +26025,30 @@ var colorNames = [...foregroundColorNames, ...backgroundColorNames];
 var ansiStyles = assembleStyles();
 var ansi_styles_default = ansiStyles;
 
-// node_modules/chalk/source/vendor/supports-color/index.js
-import process2 from "process";
-import os from "os";
-import tty from "tty";
-var hasFlag = function(flag, argv = globalThis.Deno ? globalThis.Deno.args : process2.argv) {
-  const prefix = flag.startsWith("-") ? "" : flag.length === 1 ? "-" : "--";
-  const position = argv.indexOf(prefix + flag);
-  const terminatorPosition = argv.indexOf("--");
-  return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
-};
-var envForceColor = function() {
-  if ("FORCE_COLOR" in env) {
-    if (env.FORCE_COLOR === "true") {
-      return 1;
-    }
-    if (env.FORCE_COLOR === "false") {
-      return 0;
-    }
-    return env.FORCE_COLOR.length === 0 ? 1 : Math.min(Number.parseInt(env.FORCE_COLOR, 10), 3);
-  }
-};
-var translateLevel = function(level) {
-  if (level === 0) {
-    return false;
-  }
-  return {
-    level,
-    hasBasic: true,
-    has256: level >= 2,
-    has16m: level >= 3
-  };
-};
-var _supportsColor = function(haveStream, { streamIsTTY, sniffFlags = true } = {}) {
-  const noFlagForceColor = envForceColor();
-  if (noFlagForceColor !== undefined) {
-    flagForceColor = noFlagForceColor;
-  }
-  const forceColor = sniffFlags ? flagForceColor : noFlagForceColor;
-  if (forceColor === 0) {
-    return 0;
-  }
-  if (sniffFlags) {
-    if (hasFlag("color=16m") || hasFlag("color=full") || hasFlag("color=truecolor")) {
+// node_modules/chalk/source/vendor/supports-color/browser.js
+var level = (() => {
+  if (navigator.userAgentData) {
+    const brand = navigator.userAgentData.brands.find(({ brand: brand2 }) => brand2 === "Chromium");
+    if (brand && brand.version > 93) {
       return 3;
     }
-    if (hasFlag("color=256")) {
-      return 2;
-    }
   }
-  if (("TF_BUILD" in env) && ("AGENT_NAME" in env)) {
+  if (/\b(Chrome|Chromium)\//.test(navigator.userAgent)) {
     return 1;
   }
-  if (haveStream && !streamIsTTY && forceColor === undefined) {
-    return 0;
-  }
-  const min = forceColor || 0;
-  if (env.TERM === "dumb") {
-    return min;
-  }
-  if (process2.platform === "win32") {
-    const osRelease = os.release().split(".");
-    if (Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
-      return Number(osRelease[2]) >= 14931 ? 3 : 2;
-    }
-    return 1;
-  }
-  if ("CI" in env) {
-    if (("GITHUB_ACTIONS" in env) || ("GITEA_ACTIONS" in env)) {
-      return 3;
-    }
-    if (["TRAVIS", "CIRCLECI", "APPVEYOR", "GITLAB_CI", "BUILDKITE", "DRONE"].some((sign) => (sign in env)) || env.CI_NAME === "codeship") {
-      return 1;
-    }
-    return min;
-  }
-  if ("TEAMCITY_VERSION" in env) {
-    return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-  }
-  if (env.COLORTERM === "truecolor") {
-    return 3;
-  }
-  if (env.TERM === "xterm-kitty") {
-    return 3;
-  }
-  if ("TERM_PROGRAM" in env) {
-    const version2 = Number.parseInt((env.TERM_PROGRAM_VERSION || "").split(".")[0], 10);
-    switch (env.TERM_PROGRAM) {
-      case "iTerm.app": {
-        return version2 >= 3 ? 3 : 2;
-      }
-      case "Apple_Terminal": {
-        return 2;
-      }
-    }
-  }
-  if (/-256(color)?$/i.test(env.TERM)) {
-    return 2;
-  }
-  if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-    return 1;
-  }
-  if ("COLORTERM" in env) {
-    return 1;
-  }
-  return min;
+  return 0;
+})();
+var colorSupport = level !== 0 && {
+  level,
+  hasBasic: true,
+  has256: level >= 2,
+  has16m: level >= 3
 };
-function createSupportsColor(stream, options2 = {}) {
-  const level = _supportsColor(stream, {
-    streamIsTTY: stream && stream.isTTY,
-    ...options2
-  });
-  return translateLevel(level);
-}
-var { env } = process2;
-var flagForceColor;
-if (hasFlag("no-color") || hasFlag("no-colors") || hasFlag("color=false") || hasFlag("color=never")) {
-  flagForceColor = 0;
-} else if (hasFlag("color") || hasFlag("colors") || hasFlag("color=true") || hasFlag("color=always")) {
-  flagForceColor = 1;
-}
 var supportsColor = {
-  stdout: createSupportsColor({ isTTY: tty.isatty(1) }),
-  stderr: createSupportsColor({ isTTY: tty.isatty(2) })
+  stdout: colorSupport,
+  stderr: colorSupport
 };
-var supports_color_default = supportsColor;
+var browser_default = supportsColor;
 
 // node_modules/chalk/source/utilities.js
 function stringReplaceAll(string, substring, replacer) {
@@ -26380,7 +26084,7 @@ function stringEncaseCRLFWithFirstIndex(string, prefix, postfix, index) {
 var createChalk = function(options2) {
   return chalkFactory(options2);
 };
-var { stdout: stdoutColor, stderr: stderrColor } = supports_color_default;
+var { stdout: stdoutColor, stderr: stderrColor } = browser_default;
 var GENERATOR = Symbol("GENERATOR");
 var STYLER = Symbol("STYLER");
 var IS_EMPTY = Symbol("IS_EMPTY");
@@ -26421,18 +26125,18 @@ styles2.visible = {
     return builder;
   }
 };
-var getModelAnsi = (model, level, type, ...arguments_) => {
+var getModelAnsi = (model, level2, type, ...arguments_) => {
   if (model === "rgb") {
-    if (level === "ansi16m") {
+    if (level2 === "ansi16m") {
       return ansi_styles_default[type].ansi16m(...arguments_);
     }
-    if (level === "ansi256") {
+    if (level2 === "ansi256") {
       return ansi_styles_default[type].ansi256(ansi_styles_default.rgbToAnsi256(...arguments_));
     }
     return ansi_styles_default[type].ansi(ansi_styles_default.rgbToAnsi(...arguments_));
   }
   if (model === "hex") {
-    return getModelAnsi("rgb", level, type, ...ansi_styles_default.hexToRgb(...arguments_));
+    return getModelAnsi("rgb", level2, type, ...ansi_styles_default.hexToRgb(...arguments_));
   }
   return ansi_styles_default[type][model](...arguments_);
 };
@@ -26440,9 +26144,9 @@ var usedModels = ["rgb", "hex", "ansi256"];
 for (const model of usedModels) {
   styles2[model] = {
     get() {
-      const { level } = this;
+      const { level: level2 } = this;
       return function(...arguments_) {
-        const styler = createStyler(getModelAnsi(model, levelMapping[level], "color", ...arguments_), ansi_styles_default.color.close, this[STYLER]);
+        const styler = createStyler(getModelAnsi(model, levelMapping[level2], "color", ...arguments_), ansi_styles_default.color.close, this[STYLER]);
         return createBuilder(this, styler, this[IS_EMPTY]);
       };
     }
@@ -26450,9 +26154,9 @@ for (const model of usedModels) {
   const bgModel = "bg" + model[0].toUpperCase() + model.slice(1);
   styles2[bgModel] = {
     get() {
-      const { level } = this;
+      const { level: level2 } = this;
       return function(...arguments_) {
-        const styler = createStyler(getModelAnsi(model, levelMapping[level], "bgColor", ...arguments_), ansi_styles_default.bgColor.close, this[STYLER]);
+        const styler = createStyler(getModelAnsi(model, levelMapping[level2], "bgColor", ...arguments_), ansi_styles_default.bgColor.close, this[STYLER]);
         return createBuilder(this, styler, this[IS_EMPTY]);
       };
     }
@@ -26466,8 +26170,8 @@ var proto = Object.defineProperties(() => {
     get() {
       return this[GENERATOR].level;
     },
-    set(level) {
-      this[GENERATOR].level = level;
+    set(level2) {
+      this[GENERATOR].level = level2;
     }
   }
 });
@@ -26550,17 +26254,17 @@ var get = (codeOrName) => {
 };
 
 // node_modules/ansi-escapes/index.js
-import process3 from "process";
+import process2 from "process";
 var ESC = "\x1B[";
 var OSC = "\x1B]";
 var BEL = "\x07";
 var SEP = ";";
 var isBrowser = typeof window !== "undefined" && typeof window.document !== "undefined";
-var isTerminalApp = !isBrowser && process3.env.TERM_PROGRAM === "Apple_Terminal";
-var isWindows = !isBrowser && process3.platform === "win32";
+var isTerminalApp = !isBrowser && process2.env.TERM_PROGRAM === "Apple_Terminal";
+var isWindows = !isBrowser && process2.platform === "win32";
 var cwdFunction = isBrowser ? () => {
   throw new Error("`process.cwd()` only works in Node.js, not the browser.");
-} : process3.cwd;
+} : process2.cwd;
 var ansiEscapes = {};
 ansiEscapes.cursorTo = (x, y) => {
   if (typeof x !== "number") {
@@ -26672,7 +26376,7 @@ ansiEscapes.iTerm = {
 var ansi_escapes_default = ansiEscapes;
 
 // node_modules/marked-terminal/index.js
-var import_supports_hyperlinks = __toESM(require_supports_hyperlinks(), 1);
+var import_supports_hyperlinks = __toESM(require_browser(), 1);
 var Renderer = function(options2, highlightOptions) {
   this.o = Object.assign({}, defaultOptions, options2);
   this.tab = sanitizeTab(this.o.tab, defaultOptions.tab);
@@ -26963,14 +26667,14 @@ Renderer.prototype.blockquote = function(quote) {
 Renderer.prototype.html = function(html) {
   return this.o.html(html);
 };
-Renderer.prototype.heading = function(text, level, raw) {
+Renderer.prototype.heading = function(text, level2, raw) {
   text = this.transform(text);
-  var prefix = this.o.showSectionPrefix ? new Array(level + 1).join("#") + " " : "";
+  var prefix = this.o.showSectionPrefix ? new Array(level2 + 1).join("#") + " " : "";
   text = prefix + text;
   if (this.o.reflowText) {
     text = reflowText(text, this.o.width, this.options.gfm);
   }
-  return section(level === 1 ? this.o.firstHeading(text) : this.o.heading(text));
+  return section(level2 === 1 ? this.o.firstHeading(text) : this.o.heading(text));
 };
 Renderer.prototype.hr = function() {
   return section(this.o.hr(hr("-", this.o.reflowText && this.o.width)));
@@ -27087,9 +26791,8 @@ var options2 = program.opts();
 var chat2;
 var answer;
 var executable;
-import_node_cmd.default.runSync("chmod 777./scripts/last_command.sh");
 import_node_cmd.default.runSync("chmod +x ./index.js");
-var commandResult = import_node_cmd.default.runSync("sh ./scripts/last_command.sh");
+var commandResult = import_node_cmd.default.runSync("cat ~/.zsh_history | tail -n 2 | head -n 1 | cut -d ';' -f 2");
 var command = commandResult?.data?.trim() ?? "";
 var lastCommdQuestion = readline.createInterface({
   input: process.stdin,

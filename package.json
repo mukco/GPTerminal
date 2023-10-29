@@ -8,15 +8,18 @@
     "openai": "^4.14.1"
   },
   "name": "mukco-gpterminal",
-  "version": "0.0.3",
+  "version": "0.0.11",
   "bin": {
-    "gpterminal": "./index.js"
+    "gpterm": "./index.js"
   },
   "type": "module",
   "description": "An attempt at faster terminal debugging.",
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
+    "uninstall": "npm uninstall -g mukco-gpterminal",
+    "install": "npm install -g mukco-gpterminal",
+    "build": "bun build ./src/index.ts --outfile=index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

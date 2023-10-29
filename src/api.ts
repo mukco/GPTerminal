@@ -6,7 +6,7 @@ const openai = new OpenAi({
 
 const prompt = (command, error) => `
   You're a programmer.
-  You just encounter this ${error} running this ${command}.
+  You just encountered this ${error} running this ${command}.
   Can you debug it to the best of your abilities?
   Be concise in your response. Return a command you think may fix it as a code snippet.
   If you can not, return "I can not debug this" as your response.

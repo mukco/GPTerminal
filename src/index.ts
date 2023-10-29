@@ -1,11 +1,11 @@
 #!/usr/bin/env bun
 
 import cmd from 'node-cmd'
-import  readline from 'readline'
-import { openAiApi } from './api'
-import isEmpty from 'lodash/isEmpty'
-import { program } from 'commander'
+import readline from 'readline'
 import { marked } from 'marked'
+import { openAiApi } from './api'
+import { program } from 'commander'
+import isEmpty from 'lodash/isEmpty'
 import { markedTerminal } from 'marked-terminal'
 
 marked.use(markedTerminal())
@@ -13,16 +13,16 @@ marked.use(markedTerminal())
 program.option('--debug')
 program.parse()
 
+// Future use
 const options = program.opts()
 
 let chat
 let answer
 let executable
 
-cmd.runSync("chmod 777 ./scripts/last_command.sh")
 cmd.runSync("chmod +x ./index.js")
 
-let commandResult = cmd.runSync("sh ./scripts/last_command.sh")
+let commandResult = cmd.runSync("cat ~/.zsh_history | tail -n 2 | head -n 1 | cut -d ';' -f 2")
 const command = commandResult?.data?.trim() ?? ""
 
 const lastCommdQuestion = readline.createInterface({
