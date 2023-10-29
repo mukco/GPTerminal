@@ -29,28 +29,33 @@ npm ERR! /Users/foo/.npm/_logs/2023-10-29T20_27_47_598Z-debug-0.log
 ```
 
 
-## Run gpterm
+## Run gpterm and choose command to debug
 ```bash
 ➜  ~ gpterm
-The last command was: npm run foo.
-
-## Are you sure that is the one you want to debug? (Y/n)
-
-Y
+? Please choose a command to debug: (Use arrow keys)
+❯ gpterm
+  clear
+  gpterm
+  npm run foo
+  gpterm
+  Exit
+```
+## gpterm debugs command
+```bash
 Debugging npm run foo
 
 
 # Debugger's response:
 
- This error typically occurs when there is no package.json file in your current directory. Please ensure that a package.json file exists in your project directory and you're located in the project root directory when running commands. If no package.json exists in your project you can create one with the npm init command.
+ It seems like the package.json file is missing which is required for npm to run. Please ensure it is present in the correct directory and try again.
 
 
 # Code snippet:
 
- npm init -y
+ touch package.json
 
 
-Debugger marked npm init -y as executable. Do you want to run it? (Y/n)
+Debugger marked touch package.json as executable. Do you want to run it? (Y/n)
 
 n
 ```
