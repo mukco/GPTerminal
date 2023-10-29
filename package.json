@@ -9,6 +9,10 @@
   },
   "name": "gpterminal",
   "version": "0.0.1",
+  "bin": {
+    "gpterminal": "./index.js"
+  },
+  "type": "module",
   "description": "An attempt at faster terminal debugging.",
   "main": "index.js",
   "devDependencies": {},

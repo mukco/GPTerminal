@@ -1,9 +1,11 @@
+#!/usr/bin/env bun
+
 import cmd from 'node-cmd'
-import { marked } from 'marked';
 import  readline from 'readline'
 import { openAiApi } from './api'
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 import { program } from 'commander'
+import { marked } from 'marked'
 import { markedTerminal } from 'marked-terminal'
 
 marked.use(markedTerminal())
@@ -16,10 +18,12 @@ const options = program.opts()
 let chat
 let answer
 let executable
-let commandResult
 
 cmd.runSync("chmod 777./scripts/last_command.sh")
-const command = cmd.runSync("sh ./scripts/last_command.sh").data.trim()
+cmd.runSync("chmod +x ./index.js")
+
+let commandResult = cmd.runSync("sh ./scripts/last_command.sh")
+const command = commandResult?.data?.trim() ?? ""
 
 const lastCommdQuestion = readline.createInterface({
   input: process.stdin,
