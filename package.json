@@ -7,7 +7,7 @@
     "node-cmd": "^5.0.0",
     "openai": "^4.14.1"
   },
-  "name": "gpterminal",
+  "name": "mukco-gpterminal",
   "version": "0.0.1",
   "bin": {
     "gpterminal": "./index.js"
