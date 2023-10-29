@@ -8,7 +8,7 @@
     "openai": "^4.14.1"
   },
   "name": "mukco-gpterminal",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "bin": {
     "gpterm": "./index.js"
   },
